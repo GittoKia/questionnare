@@ -1,0 +1,30 @@
+.topicCard {
+  max-width: 420px;  /* pick any width that looks good */
+  margin:0;
+  width: 100%;
+}
+
+/* purely cosmetic examples */
+.topicCard a {
+  display: block;            /* whole card is clickable */
+  background: #c1e6f1;
+  border: 2px solid #002334;
+  border-radius: 6px;
+  padding: 1rem;
+  text-decoration: none;
+}
+
+
+
+
+
+.topicCard h1 {
+  margin: 0 0 0.25rem;
+  font-size: 1.25rem;
+}
+
+.topicCard h2 {
+  margin: 0;
+  font-size: 1rem;
+  color: #333;
+}

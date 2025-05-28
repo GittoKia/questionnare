@@ -1,0 +1,8 @@
+/* HomePage.scss */
+.Cards {
+  display: flex;
+  flex-direction: column;   /* one card per row            */
+  align-items: center;      /* centre each card horizontally */
+  gap: 1.25rem;
+  margin-inline: auto;      /* keep the whole column centred */
+}

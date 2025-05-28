@@ -1,0 +1,21 @@
+.topic{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    h2{
+color:red;
+font-size:25px;
+    }
+    p{
+        font-size:15px;
+    }
+}
+
+.buttons{
+    display:flex;
+    flex-direction:row;
+    button{
+    background-color:black;
+    color:white;
+    }
+}
