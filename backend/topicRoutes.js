@@ -38,6 +38,7 @@ topicRoutes.route("/topics").post(async (request, response) => {
         title: request.body.title,
         description: request.body.description,
         content: request.body.content,
+        questions: request.body.questions
     }
     let data = await db.collection("topics").insertOne(mongoObject)
     response.json(data)
@@ -51,6 +52,7 @@ topicRoutes.route("/topics/:id").put(async (request, response) => {
             title: request.body.title,
             description: request.body.description,
             content: request.body.content,
+            questions:request.body.questions
         }
     }
     let data = await db.collection("topics").updateOne({_id:new ObjectId(request.params.id)},mongoObject)

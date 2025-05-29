@@ -1,50 +1,54 @@
-
 import { toast } from 'react-toastify';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import topicsData from '../topics.json';
+import { useEffect, useState } from 'react';
+import { getTopic } from '../api';
 import type { Topic } from '../types';
-import '../styles/Question.scss'
+import '../styles/Question.scss';
 
 const Question = () => {
-  /* 1. pull both route params */
+  /* route parameters */
   const { id, q } = useParams<{ id: string; q: string }>();
   const navigate = useNavigate();
+
+  /* local state */
+  const [topic, setTopic] = useState<Topic | null>(null);
   const [correct, setCorrect] = useState(0);
 
-  /* 2. look up the topic by id */
-  const topic: Topic | undefined = topicsData.topics.find(
-    (t: Topic) => t.id === Number(id)
-  );
+  /* fetch topic once (and if id changes) */
+  useEffect(() => {
+    (async () => {
+      const data = await getTopic(id);
+      setTopic(data);
+    })();
+  }, []);
 
-  if (!topic) return <p>Topic not found.</p>;
+  /* guard first paint */
+  if (!topic) return null;
 
-  /* 3. decide which question we’re on */
-  const index = Number(q) - 1; // 0,1,2,3,4
+  /* derive current question */
+  const index = Number(q) - 1;          // 0‑based
   const current = topic.questions[index];
-  if (!current) return <p>No more questions for this topic.</p>;
+  if (!current) return <p>No more questions.</p>;
 
-  /* 4. handle button clicks */
+  /* click handler */
   const handlePress = (guess: boolean) => {
-    if (guess === current.answer) {
-      toast.success('Correct!');
-      setCorrect((c) => c + 1);   
-    } else {
-      toast.error('Incorrect.');
-    }
+    const isCorrect = guess === current.answer;
+    toast[isCorrect ? 'success' : 'error'](isCorrect ? 'Correct!' : 'Incorrect.');
 
-    const nextRouteNumber = Number(q) + 1;            // stay 1‑based in the URL
-    if (nextRouteNumber <= topic.questions.length) {
-      navigate(`/topic/${topic.id}/question/${nextRouteNumber}`,{state:{correct}});
+    const nextCorrect = correct + (isCorrect ? 1 : 0);
+    setCorrect(nextCorrect);
 
+    const nextQ = Number(q) + 1;        // stay 1‑based in URL
+    if (nextQ <= 5) {
+      navigate(`/topic/${topic._id}/question/${nextQ}`, { state: { correct: nextCorrect } });
     } else {
-      navigate(`/topic/${topic.id}/result`,{
-        state: { correct: guess === current.answer ? correct + 1 : correct, total: topic.questions.length },
-      }); // back to article (or summary page)
+      navigate(`/topic/${topic._id}/result`, {
+        state: { correct: nextCorrect, total: 5 },
+      });
     }
   };
 
-  /* 5. render */
+  /* render */
   return (
     <div className="topic">
       <h2>{current.prompt}</h2>
@@ -54,8 +58,8 @@ const Question = () => {
         <button onClick={() => handlePress(false)}>False</button>
       </div>
 
-      <p>
-        Question {q} / {topic.questions.length}
+      <p className="progress">
+        Question {q} / 5
       </p>
     </div>
   );

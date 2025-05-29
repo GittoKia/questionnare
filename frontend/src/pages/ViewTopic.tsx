@@ -12,15 +12,18 @@ const ViewTopic = () => {
   const [topic, setTopic] = useState<Topic>()
   useEffect(() => {
     async function loadPost() {
-      let data = await getTopic(id!)
+      let data = await getTopic(id)
       setTopic(data)
     }
     loadPost()
   }, [])
 
   //update topic information
-  async function updateTopic(
+  async function updateTopic(e: React.FormEvent<HTMLButtonElement>
   ) {
+     e.preventDefault()
+     if (topic){
+    navigate(`/topic/${topic._id}/update`)}
   }
 
   //delete topic information
@@ -41,7 +44,7 @@ const ViewTopic = () => {
       <h2>{topic.description}</h2>
       <p>{topic.content}</p>
       <Link to={`/topic/${topic._id}/question/1`}>Start</Link>
-      <button onSubmit={updateTopic}>Update Topic</button>
+      <button onClick={updateTopic}>Update Topic</button>
       <button onClick={handleDelete}>Delete Topic</button>
     </div>
   );

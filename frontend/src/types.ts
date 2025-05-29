@@ -1,7 +1,6 @@
 /*Parameters*/
 
 export type Question ={
-  id: number;
   prompt: string;
   answer: boolean;
 }
@@ -10,8 +9,8 @@ export type Topic ={
   _id: string;
   title: string;
   description: string;
-  content?:string;
-  questions?: Question[];
+  content:string;
+  questions: Question[];
 }
 
 /*Returns*/ 

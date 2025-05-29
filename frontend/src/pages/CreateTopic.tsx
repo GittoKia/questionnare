@@ -1,127 +1,156 @@
-import { useState} from "react"
-import { createTopic } from "../api"
-import { useNavigate } from "react-router-dom"
-import '../styles/CreateTopic.scss'
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { createTopic, getTopic, updateTopic } from '../api';
+import type { Topic } from '../types';
+import '../styles/CreateTopic.scss';
+
 const CreateTopic = ({ premade }: { premade: boolean }) => {
 
-  const [title, setTitle] = useState("")
-  const [description, setDescription] = useState("")
-  const [content, setContent] = useState("")
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [content, setContent] = useState('');
+  type QuestionForm = {
+    prompt: string;
+    answer: boolean | null;   // null  = not chosen yet
+  };
 
-const navigate=useNavigate()
+  const emptyQuestion = (): QuestionForm => ({ prompt: '', answer: null });
 
-  async function handleSubmit(e: { preventDefault: () => void }) {
-    e.preventDefault()
-    let submitObject = {
-      title: title,
-      description: description,
-      content: content,
+  const [questions, setQuestions] = useState<QuestionForm[]>(
+    Array(5).fill(null).map(emptyQuestion)
+  );
+
+  useEffect(() => {
+    async function loadPost() {
+      if (!premade || !id) return;
+
+      const data: Topic = await getTopic(id);
+      setTitle(data.title);
+      setDescription(data.description);
+      setContent(data.content);
+
+      setQuestions(
+        data.questions.map((q) => ({
+          prompt: q.prompt,
+          answer: q.answer,          // true / false boolean
+        })))
+
     }
-    await createTopic(submitObject)
-    navigate(-1)
+    loadPost();
+  }, []);
+
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+
+    const submitObject = {
+      title,
+      description,
+      content,
+
+      questions: questions.map((q) => ({
+        prompt: q.prompt,
+        answer: q.answer as boolean,   // now safely non‑null
+      })),
+    };
+
+    if (!premade || !id) {
+      await createTopic(submitObject);
+      navigate(-1);
+    }
+    else {
+      await updateTopic(id, submitObject)
+      navigate(`/topic/${id}`)
+    }
+
   }
 
   return (
     <form onSubmit={handleSubmit}>
       <label>Topic Title:</label>
-      <input onChange={(e) => setTitle(e.target.value)} required></input>
+      <input
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        required
+      />
 
       <label>Topic Description:</label>
-      <input onChange={(e) => setDescription(e.target.value)} required></input>
+      <input
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        required
+      />
 
       <label>Topic Content:</label>
-      <input onChange={(e) => setContent(e.target.value)} required></input>
+      <input
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
+        required
+      />
 
-      <label>Question 1:</label>
-      <input></input>
-
-      <div className='true-false'>
-        <label className="mb-1 font-medium">Correct answer</label>
-        <label className="mr-4 inline-flex items-center gap-1">
+      {questions.map((q, i) => (
+        <div key={i} className="question-block">
+          <label>Question {i + 1}:</label>
           <input
-            type="radio"
-            name="answer"
-            value="true"
-            className="accent-blue-600"
+            value={q.prompt}
+            onChange={(e) =>
+              setQuestions((prev) => {
+                const next = [...prev];
+                next[i] = { ...next[i], prompt: e.target.value };
+                return next;
+              })
+            }
+            required
           />
-          True
-        </label>
 
-        <label className="inline-flex items-center gap-1">
-          <input type="radio" name="answer" value="false" className="accent-blue-600" />
-          False
-        </label>
-      </div>
+          <div className="true-false">
+            <span className="label">Correct answer&nbsp;</span>
 
-      <label>Question 2:</label>
-      <input></input>
+            <label>
+              <input
+                type="radio"
+                name={`answer-${i}`}     // **unique group per question**
+                value="true"
+                checked={q.answer === true}
+                onChange={() =>
+                  setQuestions((prev) => {
+                    const next = [...prev];
+                    next[i] = { ...next[i], answer: true };
+                    return next;
+                  })
+                }
+                required
+              />
+              True
+            </label>
 
-      <div className='true-false'>
-        <label className="mb-1 font-medium">Correct answer</label>
-        <label className="mr-4 inline-flex items-center gap-1">
-          <input type="radio" name="answer" value="true" className="accent-blue-600" />
-          True
-        </label>
+            <label>
+              <input
+                type="radio"
+                name={`answer-${i}`}
+                value="false"
+                checked={q.answer === false}
+                onChange={() =>
+                  setQuestions((prev) => {
+                    const next = [...prev];
+                    next[i] = { ...next[i], answer: false };
+                    return next;
+                  })
+                }
+                required
+              />
+              False
+            </label>
+          </div>
+        </div>
+      ))}
 
-        <label className="inline-flex items-center gap-1">
-          <input type="radio" name="answer" value="false" className="accent-blue-600" />
-          False
-        </label>
-      </div>
 
-      <label>Question 3:</label>
-      <input></input>
-
-      <div className='true-false'>
-        <label className="mb-1 font-medium">Correct answer</label>
-
-        <label className="mr-4 inline-flex items-center gap-1">
-          <input type="radio" name="answer" value="true" className="accent-blue-600" />
-          True
-        </label>
-
-        <label className="inline-flex items-center gap-1">
-          <input type="radio" name="answer" value="false" className="accent-blue-600" />
-          False
-        </label>
-      </div>
-
-      <label>Question 4:</label>
-      <input></input>
-
-      <div className='true-false'>
-        <label className="mb-1 font-medium">Correct answer</label>
-
-        <label className="mr-4 inline-flex items-center gap-1">
-          <input type="radio" name="answer" value="true" className="accent-blue-600" />
-          True
-        </label>
-
-        <label className="inline-flex items-center gap-1">
-          <input type="radio" name="answer" value="false" className="accent-blue-600" />
-          False
-        </label>
-      </div>
-
-      <label>Question 5:</label>
-      <input></input>
-      <div className='true-false'>
-        <label className="mb-1 font-medium">Correct answer</label>
-
-        <label className="mr-4 inline-flex items-center gap-1">
-          <input type="radio" name="answer" value="true" className="accent-blue-600" />
-          True
-        </label>
-
-        <label className="inline-flex items-center gap-1">
-          <input type="radio" name="answer" value="false" className="accent-blue-600" />
-          False
-        </label>
-      </div>
-
-      <button type='submit'>Submit</button>
+      <button type="submit">Submit</button>
     </form>
-  )
-}
+  );
+};
 
-export default CreateTopic
+export default CreateTopic;
