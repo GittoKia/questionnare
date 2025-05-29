@@ -7,7 +7,7 @@ export type Question ={
 }
 
 export type Topic ={
-  id: number;
+  _id: string;
   title: string;
   description: string;
   content?:string;

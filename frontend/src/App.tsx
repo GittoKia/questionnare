@@ -3,13 +3,11 @@ import { ToastContainer } from 'react-toastify';
 
 import MainLayout from './layouts/MainLayout'
 import Question from './pages/Question'
-import Topic from './pages/Topic'
+import ViewTopic from './pages/ViewTopic'
 import HomePage from './pages/HomePage'
 import Result from './pages/Result'
 import About from './pages/About';
 import CreateTopic from './pages/CreateTopic';
-
-import topicsData from './topics.json'
 
 
 const App = () => {
@@ -21,9 +19,10 @@ const App = () => {
         <Route path='/' element={<MainLayout />}>
           <Route index element={<HomePage />} />
           <Route path='/about' element={<About />} />
-          <Route path="/topic/:id" element={<Topic topics={topicsData.topics} />} />
+          <Route path="/topic/:id" element={<ViewTopic />} />
           <Route path="/topic/:id/result" element={<Result />} />
-          <Route path="/createTopic" element={<CreateTopic/>}/>
+          <Route path="/createTopic" element={<CreateTopic premade={false}/>}/>
+          <Route path="/topic/:id/update" element={<CreateTopic premade={true}/>}/>
         </Route>
         <Route path='/topic/:id/question/:q' element={<Question />} />
       </>
