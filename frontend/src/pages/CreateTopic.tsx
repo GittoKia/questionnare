@@ -58,7 +58,7 @@ const CreateTopic = ({ premade }: { premade: boolean }) => {
 
     if (!premade || !id) {
       await createTopic(submitObject);
-      navigate(-1);
+      navigate("/home");
     }
     else {
       await updateTopic(id, submitObject)
@@ -106,7 +106,7 @@ const CreateTopic = ({ premade }: { premade: boolean }) => {
           />
 
           <div className="true-false">
-            <span className="label">Correct answer&nbsp;</span>
+            <label className="label">Correct answer&nbsp;</label>
 
             <label>
               <input

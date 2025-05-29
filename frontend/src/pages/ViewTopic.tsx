@@ -32,7 +32,7 @@ const ViewTopic = () => {
     e.preventDefault()
     if (topic){
     await deleteTopic(topic._id)}
-    navigate(-1)
+    navigate("/home")
   }
 
   //return topic information

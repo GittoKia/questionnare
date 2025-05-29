@@ -12,7 +12,7 @@ const Result = () => {
 
   if (state === null) {
     // user refreshed or hit the URL manually → punt them home
-    return <Link to="/">Back to Home</Link>;
+    return <Link to="/home">Back to Home</Link>;
   }
 
   return (
@@ -31,7 +31,7 @@ const Result = () => {
         </button>
 
         <Link
-          to="/"
+          to="/home"
           className="rounded bg-gray-200 px-4 py-2 font-medium text-gray-800"
         >
           Home
