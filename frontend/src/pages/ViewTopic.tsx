@@ -2,7 +2,7 @@ import { useParams, Link } from 'react-router-dom';
 import type { Topic } from '../types';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { getTopic, updateTopic, deleteTopic } from '../api';
+import { getTopic,deleteTopic } from '../api';
 import '../styles/Topic.scss'
 const ViewTopic = () => {
 
@@ -19,14 +19,16 @@ const ViewTopic = () => {
   }, [])
 
   //update topic information
-  async function updateTopic(e
+  async function updateTopic(
   ) {
   }
 
   //delete topic information
-  async function handleDelete(e
+  async function handleDelete(e: React.FormEvent<HTMLButtonElement>
   ) {
-    await deleteTopic(topic._id)
+    e.preventDefault()
+    if (topic){
+    await deleteTopic(topic._id)}
     navigate(-1)
   }
 
