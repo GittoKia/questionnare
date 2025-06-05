@@ -3,7 +3,8 @@ import type { Topic } from '../types';
 import { convertDate } from '../types';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { getTopic, deleteTopic } from '../api';
+import { getTopic, deleteTopic,getUser } from '../api';
+import * as jwt_decode from 'jwt-decode'
 import Spinner from '../components/Spinner';
 import '../styles/Topic.scss'
 export const sleep = (ms: number) =>
@@ -15,12 +16,21 @@ const ViewTopic = () => {
   const { id } = useParams<{ id: string }>();
   const [topic, setTopic] = useState<Topic>()
   const [loading, setLoading] = useState(true)
-
+  const[userName,setUserName]=useState("")
+  const token=sessionStorage.getItem('User')
+  let boole=false;
+if (token && topic){
+            const decodedToken = jwt_decode.jwtDecode<{ _id: string }>(token)
+boole=(decodedToken._id==topic.author);}
 
   useEffect(() => {
     async function loadPost() {
       let data = await getTopic(id)
       setTopic(data)
+      if (data && data.author) {
+      const user = await getUser(data.author);
+      setUserName(user.name); // assumes user object has a 'name' property
+    }
       await sleep(500);
       setLoading(false)
     }
@@ -66,9 +76,14 @@ const ViewTopic = () => {
           <h2>{topic.description}</h2>
           <p>{topic.content}</p>
           <h3>{convertDate(new Date(topic.dateCreated))}</h3>
+          <h3>{userName}</h3>
           <Link to={`/topic/${topic._id}/question/1`}>Start</Link>
-          <button onClick={handleUpdate}>Update Topic</button>
-          <button onClick={handleDelete}>Delete Topic</button>
+          {boole ? (
+            <div>
+              <button onClick={handleUpdate}>Update Topic</button>
+              <button onClick={handleDelete}>Delete Topic</button>
+            </div>
+          ) : null}
         </div>)}
     </div>
   );

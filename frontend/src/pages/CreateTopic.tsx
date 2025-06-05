@@ -11,6 +11,7 @@ const CreateTopic = ({ premade }: { premade: boolean }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [content, setContent] = useState('');
+  const [numQuestions, setNumQuestions] = useState(5);
   type QuestionForm = {
     prompt: string;
     answer: boolean | null;   // null  = not chosen yet
@@ -39,7 +40,20 @@ const CreateTopic = ({ premade }: { premade: boolean }) => {
 
     }
     loadPost();
-  }, []);
+    setQuestions((prev) => {
+    const next = [...prev];
+    if (next.length < numQuestions) {
+      // Add empty questions
+      for (let i = next.length; i < numQuestions; i++) {
+        next.push({ prompt: '', answer: null });
+      }
+    } else if (next.length > numQuestions) {
+      // Remove extra questions
+      next.length = numQuestions;
+    }
+    return next;
+  });
+  }, [numQuestions]);
 
 
   async function handleSubmit(e: React.FormEvent) {
@@ -104,6 +118,18 @@ const CreateTopic = ({ premade }: { premade: boolean }) => {
         onChange={(e) => setContent(e.target.value)}
         required
       />
+
+<label>
+    Number of Questions: {numQuestions}
+    <input
+      type="range"
+      min={2}
+      max={10}
+      value={numQuestions}
+      onChange={e => setNumQuestions(Number(e.target.value))}
+      style={{ width: 200, marginLeft: 10 }}
+    />
+  </label>
 
       {questions.map((q, i) => (
         <div key={i} className="question-block">
