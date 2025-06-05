@@ -28,21 +28,23 @@ export async function getTopics() {
 
 export async function getTopic(id) {
 
-    const response = await axios.get(`${URL}/topic/${id}`)
+    const response = await axios.get(`${URL}/topics/${id}`)
 
     const topic = response.data
     const data = await getImage(topic.imageId)
-    topic.image = data;
+    topic.image = data.data;
     return topic
 }
 
 export async function createTopic(topic) {
-const data = await createImage(topic.file)
-    const imageId = data.data.Key
+if (topic.file) {                              // upload only if we
+    const data = await createImage(topic.file);  // actually have a File
+    topic.imageId = data.data.Key;
+    delete topic.file;                           // keep payload clean
+  }
 
-    topic.imageId = imageId
-    const response = await axios.post(`${URL}/topics`, topic)
-    return response
+   const response = await axios.post(`${URL}/topics`, topic);
+   return response;
 }
 
 export async function updateTopic(id, topic) {
@@ -88,12 +90,8 @@ export async function verifyUser(user) {
 
 export async function createImage(file) {
     const formData = new FormData()
-    formData.append('image', file)
-    const response = await axios.post(`${URL}/images`, formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        }
-    })
+    formData.append('file', file)
+    const response = await axios.post(`${URL}/images`, formData);
     return response
 }
 

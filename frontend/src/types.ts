@@ -12,7 +12,10 @@ export type Topic ={
   content:string;
   author:string;
   dateCreated:Date;
+  //Image URL
   image:string;
+  //image from MongoDB
+  imageId?: string;
   questions: Question[];
 }
 

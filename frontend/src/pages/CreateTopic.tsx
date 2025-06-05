@@ -1,6 +1,6 @@
 import { useState, useEffect ,useRef} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { createTopic, getTopic, updateTopic } from '../api';
+import { createTopic, getTopic, updateTopic,createImage } from '../api';
 import type { Topic } from '../types';
 import '../styles/CreateTopic.scss';
 
@@ -11,6 +11,9 @@ const CreateTopic = ({ premade }: { premade: boolean }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [content, setContent] = useState('');
+  //image ID to upload to mongodb
+  const [imageId, setImageId] = useState<string | undefined>(undefined);
+  //file object
   const [file,setFile]=useState()
 const MAX_FILE_SIZE=15000000
 
@@ -34,6 +37,7 @@ const MAX_FILE_SIZE=15000000
       setTitle(data.title);
       setDescription(data.description);
       setContent(data.content);
+      setImageId(data.imageId);
 
       setQuestions(
         data.questions.map((q) => ({
@@ -54,12 +58,20 @@ const MAX_FILE_SIZE=15000000
       description:description,
       content:content,
       dateCreated: new Date(),
-      file:file,
+      imageId:"",
       questions: questions.map((q) => ({
         prompt: q.prompt,
         answer: q.answer as boolean,   // now safely non‑null
       })),
     };
+
+    if (file) {
+    const data = await createImage(file);
+    submitObject.imageId = data.data.Key;
+  } else {
+    // If no new file, keep the existing imageId (you may need to store it in state)
+    submitObject.imageId = imageId ?? ""; // Make sure to set this from the loaded topic
+  }
 
     if (!premade || !id) {
       try {

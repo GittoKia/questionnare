@@ -11,11 +11,11 @@ const app = express()
 const PORT = 3000
 
 app.use(cors())
+app.use('/images', aws);
 app.use(express.json())
-app.use(upload.any())
 app.use(topics)
 app.use(users)
-app.use(aws)
+
 
 app.listen(PORT, () => {
     connect.connectToServer()

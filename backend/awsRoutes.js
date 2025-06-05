@@ -3,6 +3,8 @@ const database = require("./connect")
 const ObjectId = require("mongodb").ObjectId
 const awsRoutes = express.Router()
 const jwt = require('jsonwebtoken')
+const multer = require('multer');
+const upload = multer();
 require("dotenv").config({ path: "./config.env" })
 const { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand} = require('@aws-sdk/client-s3')
 const { v4: uuidv4 } = require('uuid')
@@ -45,13 +47,14 @@ awsRoutes.route("/images/:id").get(async (request, response) => {
 });
 
 //Create one
-awsRoutes.route("/images").post(async (request, response) => {
-    const file = request.files[0]
+awsRoutes.route("/images").post(upload.single("file"),async (request, response) => {
+    const file = request.file
     const uniqueKey = `${uuidv4()}-${file.originalname}` // Generate a unique key
     const bucketParams = {
         Bucket: s3Bucket,
         Key: uniqueKey,
-        Body: file.buffer
+        Body: file.buffer,
+        ContentType: file.mimetype 
     }
     const data = await s3Client.send(new PutObjectCommand(bucketParams))
     response.json({ Key: uniqueKey })
