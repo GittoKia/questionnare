@@ -31,7 +31,7 @@ const Profile = () => {
         
         <div >
       <label >Name:</label>
-      <h2 >{user.name}</h2>
+      <h1 >{user.name}</h1>
       <label>Email:</label>
       <h2 >{user.email}</h2>
       <label >Join Date:</label>

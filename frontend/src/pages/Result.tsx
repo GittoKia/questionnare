@@ -27,7 +27,7 @@ const Result = () => {
   useEffect(() => {
     const updateUserData = async () => {
       if (token){
-      const decodedUser = jwt_decode.jwtDecode<User>(token);
+      const decodedUser = jwt_decode.jwtDecode<{_id:string}>(token);
       console.log((solverId!=decodedUser._id))
       if ((solverId!=decodedUser._id)) {
         
@@ -36,7 +36,12 @@ const Result = () => {
         let submitUser = {
           visitedPosts: [newVisitedPost]
         };
-        await updateUser(decodedUser._id, submitUser);
+        console.log(decodedUser._id)
+        try{
+        await updateUser(decodedUser._id, submitUser);}
+        catch{
+          console.log('no')
+        }
       }}
     };
     updateUserData();

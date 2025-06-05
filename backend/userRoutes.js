@@ -48,7 +48,7 @@ userRoutes.route("/users").post(async (request, response) => {
             email: request.body.email,
             password: hash,
             dateCreated:new Date(),
-            visitedPosts:null
+            visitedPosts:new Array()
         }
         let data = await db.collection("users").insertOne(mongoObject)
         response.json(data)
@@ -64,7 +64,10 @@ userRoutes.route("/users/:id").patch(async (request, response) => {
     // Only update provided fields
     if (request.body.name !== undefined) updateFields.name = request.body.name
     if (request.body.email !== undefined) updateFields.email = request.body.email
-    if (request.body.password !== undefined) updateFields.password = request.body.password
+    if (request.body.password !== undefined) {
+        // Hash the password before updating
+        updateFields.password = request.body.password
+    }
     if (request.body.dateCreated !== undefined) updateFields.dateCreated = request.body.dateCreated
 
     // If visitedPosts is provided as an array to append, use $push with $each
@@ -75,6 +78,11 @@ userRoutes.route("/users/:id").patch(async (request, response) => {
     // If there are other fields to set, add $set
     if (Object.keys(updateFields).length > 0) {
         updateQuery.$set = updateFields
+    }
+
+    // Prevent empty update error
+    if (Object.keys(updateQuery).length === 0) {
+        return response.status(400).json({ message: "No valid fields provided for update." })
     }
 
     let data = await db.collection("users").updateOne(
@@ -96,7 +104,6 @@ userRoutes.route("/users/login").post(async (request, response) => {
     let db = database.getDb()
 
     const user = await db.collection("users").findOne({ email: request.body.email })
-
     if (user) {
         let confirmation = await bcrypt.compare(request.body.password, user.password)
         if (confirmation) {
