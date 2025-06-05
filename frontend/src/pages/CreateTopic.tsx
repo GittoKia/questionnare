@@ -45,11 +45,11 @@ const CreateTopic = ({ premade }: { premade: boolean }) => {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    const submitObject = {
-      title,
-      description,
-      content,
-
+    let submitObject = {
+      title:title,
+      description:description,
+      content:content,
+      dateCreated: new Date(),
       questions: questions.map((q) => ({
         prompt: q.prompt,
         answer: q.answer as boolean,   // now safely non‑null
@@ -57,12 +57,27 @@ const CreateTopic = ({ premade }: { premade: boolean }) => {
     };
 
     if (!premade || !id) {
-      await createTopic(submitObject);
-      navigate("/home");
+      try {
+        await createTopic(submitObject);
+      }
+      finally {
+        navigate("/home");
+      }
     }
     else {
-      await updateTopic(id, submitObject)
-      navigate(`/topic/${id}`)
+
+      if (id) {
+        try {
+          await updateTopic(id, submitObject)
+          navigate(`/topic/${id}`)
+        }
+        finally {
+          navigate("/home")
+        }
+      }
+      else {
+        navigate("/home")
+      }
     }
 
   }

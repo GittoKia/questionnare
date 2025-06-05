@@ -1,14 +1,14 @@
 const express = require("express")
 const database = require("./connect")
 const ObjectId = require("mongodb").ObjectId
-let topicRoutes = express.Router()
 const jwt=require('jsonwebtoken')
 require("dotenv").config({ path: "./config.env" })
 
+let topicRoutes = express.Router()
 //Crud Operations
 
 //#1 - Retrieve All
-topicRoutes.route("/topics").get(async (request, response) => {
+topicRoutes.route("/topics").get(verifyToken,async (request, response) => {
     let db = database.getDb()
     let data = await db.collection("topics").find({}).toArray()
     if (data.length > 0) {
@@ -20,7 +20,7 @@ topicRoutes.route("/topics").get(async (request, response) => {
 })
 
 //#2 - Retrieve one
-topicRoutes.route("/topics/:id").get(async (request, response) => {
+topicRoutes.route("/topics/:id").get(verifyToken,async (request, response) => {
     let db = database.getDb()
     let data = await db.collection("topics").findOne({ _id: new ObjectId(request.params.id) })
     if (Object.keys(data).length > 0) {
@@ -32,12 +32,14 @@ topicRoutes.route("/topics/:id").get(async (request, response) => {
 })
 
 //#3 - Create one
-topicRoutes.route("/topics").post(async (request, response) => {
+topicRoutes.route("/topics").post(verifyToken,async (request, response) => {
     let db = database.getDb()
     let mongoObject = {
         title: request.body.title,
         description: request.body.description,
         content: request.body.content,
+        author: request.user._id,
+        dateCreated:new Date(),
         questions: request.body.questions
     }
     let data = await db.collection("topics").insertOne(mongoObject)
@@ -45,13 +47,15 @@ topicRoutes.route("/topics").post(async (request, response) => {
 })
 
 //#4 - Update one
-topicRoutes.route("/topics/:id").put(async (request, response) => {
+topicRoutes.route("/topics/:id").put(verifyToken,async (request, response) => {
     let db = database.getDb()
     let mongoObject = {
         $set: {
             title: request.body.title,
             description: request.body.description,
             content: request.body.content,
+            author: request.author,
+            dateCreated:request.body.dateCreated,
             questions:request.body.questions
         }
     }
@@ -60,7 +64,7 @@ topicRoutes.route("/topics/:id").put(async (request, response) => {
 })
 
 //#5 - Delete one
-topicRoutes.route("/topics/:id").delete(async (request, response) => {
+topicRoutes.route("/topics/:id").delete(verifyToken,async (request, response) => {
     let db = database.getDb()
     let data = await db.collection("topics").deleteOne({ _id: new ObjectId(request.params.id) })
     response.json(data)
@@ -68,16 +72,18 @@ topicRoutes.route("/topics/:id").delete(async (request, response) => {
 
 function verifyToken(request,response,next){
     const authHeaders=request.headers["authorization"]
+    
 const token=authHeaders && authHeaders.split(' ')[1]
+
 if (!token){
     return response.status(401).json({message:"Authentication token is missing"})
 }
 
-jwt.verify(token,process.env.SECRETKEY,(error,user)=>{
+jwt.verify(token,process.env.SESSION_KEY,(error,user)=>{
     if (error){
         return response.status(403).json({message:"Invalid token"})
     }
-    request.body.user=user
+    request.user = user
     next()
 })
 

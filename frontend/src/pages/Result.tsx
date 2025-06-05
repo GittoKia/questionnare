@@ -1,6 +1,11 @@
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
-
+import * as jwt_decode from 'jwt-decode'
+import type { User } from '../types';
+import { updateUser } from '../api';
+import { useEffect } from 'react';
 type ResultState = { correct: number; total: number };
+
+type ResultProps = { solverId: string };
 
 const Result = () => {
   const { id } = useParams<{ id: string }>();
@@ -9,11 +14,34 @@ const Result = () => {
   // `state` was attached when we navigated here
   const { state } = useLocation();
   const { correct, total } = (state || {}) as ResultState;
+  const {solverId} = (state || {}) as ResultProps;
 
   if (state === null) {
     // user refreshed or hit the URL manually → punt them home
     return <Link to="/home">Back to Home</Link>;
   }
+
+
+  const token = sessionStorage.getItem("User");
+
+  useEffect(() => {
+    const updateUserData = async () => {
+      if (token){
+      const decodedUser = jwt_decode.jwtDecode<User>(token);
+      console.log((solverId!=decodedUser._id))
+      if ((solverId!=decodedUser._id)) {
+        
+        // Only send the new entry to be appended by the backend
+        const newVisitedPost = [id, correct];
+        let submitUser = {
+          visitedPosts: [newVisitedPost]
+        };
+        await updateUser(decodedUser._id, submitUser);
+      }}
+    };
+    updateUserData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="mt-8 text-center">

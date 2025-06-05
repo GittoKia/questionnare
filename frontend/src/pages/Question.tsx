@@ -43,7 +43,7 @@ const Question = () => {
       navigate(`/topic/${topic._id}/question/${nextQ}`, { state: { correct: nextCorrect } });
     } else {
       navigate(`/topic/${topic._id}/result`, {
-        state: { correct: nextCorrect, total: 5 },
+        state: { correct: nextCorrect, total: 5 ,solverId:topic.author},
       });
     }
   };
