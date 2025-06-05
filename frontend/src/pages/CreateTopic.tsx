@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect ,useRef} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { createTopic, getTopic, updateTopic } from '../api';
 import type { Topic } from '../types';
@@ -11,6 +11,10 @@ const CreateTopic = ({ premade }: { premade: boolean }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [content, setContent] = useState('');
+  const [file,setFile]=useState()
+const MAX_FILE_SIZE=15000000
+
+  const inputFile=useRef(null)
   type QuestionForm = {
     prompt: string;
     answer: boolean | null;   // null  = not chosen yet
@@ -50,6 +54,7 @@ const CreateTopic = ({ premade }: { premade: boolean }) => {
       description:description,
       content:content,
       dateCreated: new Date(),
+      file:file,
       questions: questions.map((q) => ({
         prompt: q.prompt,
         answer: q.answer as boolean,   // now safely non‑null
@@ -82,6 +87,26 @@ const CreateTopic = ({ premade }: { premade: boolean }) => {
 
   }
 
+function handleFileUpload(e){
+const file=e.target.files[0]
+console.log(file)
+const fileExtension=file.name.substring(file.name.lastIndexOf("."))
+if (fileExtension!= ".jpg" && fileExtension!= ".jpeg" && fileExtension != ".png"){
+  alert("Files must be jpg or png")
+  inputFile.current.value=""
+  inputFile.current.type="file"
+  return
+}
+if (file.size>MAX_FILE_SIZE){
+  alert("file size exeeds limit (15 MB)")
+  inputFile.current.value=""
+  inputFile.current.type="file"
+  return
+}
+setFile(file)
+
+  }
+
   return (
     <form onSubmit={handleSubmit}>
       <label>Topic Title:</label>
@@ -102,6 +127,14 @@ const CreateTopic = ({ premade }: { premade: boolean }) => {
       <input
         value={content}
         onChange={(e) => setContent(e.target.value)}
+        required
+      />
+
+      <label>Insert Header Image:</label>
+      <input
+      type="file"
+        onChange={handleFileUpload}
+         ref={inputFile}
         required
       />
 

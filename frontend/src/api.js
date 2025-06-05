@@ -29,11 +29,17 @@ export async function getTopics() {
 export async function getTopic(id) {
 
     const response = await axios.get(`${URL}/topics/${id}`)
-    return response.data
+    const topic = response.data
+    const data = await getImage(topic.imageId)
+    topic.image = data;
+    return topic
 }
 
 export async function createTopic(topic) {
+const data = await createImage(topic.file)
+    const imageId = topic.file.name
 
+    topic.imageId = imageId
     const response = await axios.post(`${URL}/topics`, topic)
     return response
 }
@@ -77,4 +83,20 @@ export async function verifyUser(user) {
     } else {
         return
     }
+}
+
+export async function createImage(file) {
+    const formData = new FormData()
+    formData.append('image', file)
+    const response = await axios.post(`${URL}/images`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    })
+    return response
+}
+
+export async function getImage(id) {
+    const response = await axios.get(`${URL}/images/${id}`)
+    return response
 }

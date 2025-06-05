@@ -20,6 +20,7 @@ const ViewTopic = () => {
   useEffect(() => {
     async function loadPost() {
       let data = await getTopic(id)
+      console.log(data)
       setTopic(data)
       await sleep(500);
       setLoading(false)

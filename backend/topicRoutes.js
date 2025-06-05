@@ -39,8 +39,11 @@ topicRoutes.route("/topics").post(verifyToken,async (request, response) => {
         description: request.body.description,
         content: request.body.content,
         author: request.user._id,
-        dateCreated:new Date(),
-        questions: request.body.questions
+        dateCreated: new Date(),
+        // Only include imageID if provided
+        ...(request.body.imageId ? { imageID: request.body.imageId } : {}),
+        // Only include questions if provided and not empty
+        ...(request.body.questions && request.body.questions.length > 0 ? { questions: request.body.questions } : {})
     }
     let data = await db.collection("topics").insertOne(mongoObject)
     response.json(data)
@@ -56,6 +59,7 @@ topicRoutes.route("/topics/:id").put(verifyToken,async (request, response) => {
             content: request.body.content,
             author: request.author,
             dateCreated:request.body.dateCreated,
+            imageID: request.body.imageId,
             questions:request.body.questions
         }
     }
