@@ -54,7 +54,7 @@ awsRoutes.route("/images").post(async (request, response) => {
         Body: file.buffer
     }
     const data = await s3Client.send(new PutObjectCommand(bucketParams))
-    response.json(data)
+    response.json({ Key: uniqueKey })
 })
 
 

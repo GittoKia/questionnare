@@ -66,6 +66,7 @@ const ViewTopic = () => {
           <h1>{topic.title}</h1>
           <h2>{topic.description}</h2>
           <p>{topic.content}</p>
+         <img src={topic.image} className="max-h-96 my-4"/>
           <h3>{convertDate(new Date(topic.dateCreated))}</h3>
           <Link to={`/topic/${topic._id}/question/1`}>Start</Link>
           <button onClick={handleUpdate}>Update Topic</button>

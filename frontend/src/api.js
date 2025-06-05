@@ -28,7 +28,8 @@ export async function getTopics() {
 
 export async function getTopic(id) {
 
-    const response = await axios.get(`${URL}/topics/${id}`)
+    const response = await axios.get(`${URL}/topic/${id}`)
+
     const topic = response.data
     const data = await getImage(topic.imageId)
     topic.image = data;
@@ -37,7 +38,7 @@ export async function getTopic(id) {
 
 export async function createTopic(topic) {
 const data = await createImage(topic.file)
-    const imageId = topic.file.name
+    const imageId = data.data.Key
 
     topic.imageId = imageId
     const response = await axios.post(`${URL}/topics`, topic)

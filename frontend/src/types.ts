@@ -12,6 +12,7 @@ export type Topic ={
   content:string;
   author:string;
   dateCreated:Date;
+  image:string;
   questions: Question[];
 }
 
