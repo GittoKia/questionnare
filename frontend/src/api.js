@@ -60,8 +60,13 @@ export async function createUser(user) {
     return response
 }
 
-export async function updateUser(id, user) {
+export async function addToUser(id, user) {
     const response = await axios.patch(`${URL}/users/${id}`, user)
+    return response
+}
+
+export async function updateUser(id, user) {
+    const response = await axios.put(`${URL}/users/${id}`, user)
     return response
 }
 

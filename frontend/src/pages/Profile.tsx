@@ -4,12 +4,13 @@ import { useState, useEffect } from "react"
 import { getTopics } from "../api"
 import { getUser } from "../api"
 import * as jwt_decode from 'jwt-decode'
+import { useNavigate } from "react-router-dom"
 
 const Profile = () => {
     const [myTopics, setMyTopics] = useState<Topic[]>([])
     const [visitedTopics, setVisitedTopics] = useState<Topic[]>([])
     const [user, setUser] = useState<User>()
-
+const navigate=useNavigate()
     useEffect(() => {
         async function loadUserData() {
             const token = sessionStorage.getItem("User")
@@ -26,6 +27,20 @@ const Profile = () => {
             setUser(decodedUser)}
         } loadUserData()
     }, [])
+
+async function handleUpdate(e: React.FormEvent<HTMLButtonElement>
+  ) {
+    e.preventDefault()
+    const token = sessionStorage.getItem("User")
+            if (token){
+            const decodedToken = jwt_decode.jwtDecode<{ _id: string }>(token)
+      navigate(`/profile/${decodedToken._id}/update`)
+    }
+    else {
+      navigate("/")
+    }
+  }
+
     if (!user) return null;
     return (
         
@@ -53,6 +68,7 @@ const Profile = () => {
               user.visitedPosts?.find(([id]) => id === topic._id)?.[1]
             }
           </h2>
+          <button onClick={handleUpdate}>Update Profile</button>
           </div>
         )
       })}

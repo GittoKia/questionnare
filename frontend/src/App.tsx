@@ -11,6 +11,7 @@ import About from './pages/About';
 import CreateTopic from './pages/CreateTopic';
 import NotFoundPage from './pages/NotFoundPage';
 import Profile from './pages/Profile'
+import UpdateUser from './pages/UpdateUser';
 import Footer from './components/Footer'
 import axios from 'axios';
 
@@ -31,7 +32,8 @@ const App = () => {
         <Route element={<MainLayout />}>
           <Route path='/home' element={<HomePage />} />
           <Route path='/about' element={<About />} />
-          <Route path='/profile' element={<Profile />} />
+          <Route path='/profile/:id' element={<Profile />} />
+          <Route path='/profile/:id/update' element={<UpdateUser />} />
           <Route path="/topic/:id" element={<ViewTopic />} />
           <Route path="/topic/:id/result" element={<Result/>} />
           <Route path="/createTopic" element={<CreateTopic premade={false}/>}/>

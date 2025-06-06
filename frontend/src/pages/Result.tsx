@@ -1,7 +1,7 @@
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import * as jwt_decode from 'jwt-decode'
 import type { User } from '../types';
-import { updateUser } from '../api';
+import { addToUser } from '../api';
 import { useEffect } from 'react';
 type ResultState = { correct: number; total: number };
 
@@ -38,7 +38,7 @@ const Result = () => {
         };
         console.log(decodedUser._id)
         try{
-        await updateUser(decodedUser._id, submitUser);}
+        await addToUser(decodedUser._id, submitUser);}
         catch{
           console.log('no')
         }

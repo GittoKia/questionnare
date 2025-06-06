@@ -55,6 +55,26 @@ userRoutes.route("/users").post(async (request, response) => {
     }
 })
 
+//Update User
+userRoutes.route("/users/:id").put(async (request, response) => {
+    let db = database.getDb()
+    const hash = await bcrypt.hash(request.body.password, SALT_ROUNDS)
+     const takenEmail = await db.collection("users").findOne({ email: request.body.email })
+
+    if (takenEmail && takenEmail._id.toString() !== request.params.id) { return response.json({ message: "The email is taken" }) }
+    let mongoObject = {
+        $set: {
+            name: request.body.name,
+            email: request.body.email,
+            password: hash,
+            dateCreated:request.body.joinDate,
+            visitedPosts:request.body.visitedPosts
+        }
+    }
+    let data = await db.collection("users").updateOne({ _id: new ObjectId(request.params.id) }, mongoObject)
+    response.json(data)
+})
+
 //#4 - Update one (PATCH)
 userRoutes.route("/users/:id").patch(async (request, response) => {
     let db = database.getDb()
