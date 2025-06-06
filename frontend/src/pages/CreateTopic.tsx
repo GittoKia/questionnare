@@ -1,8 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { createTopic, getTopic, updateTopic } from '../api';
-import type { Topic } from '../types';
+import type { Topic, Question } from '../types';
 import '../styles/CreateTopic.scss';
+
+//fill up questions
+const emptyQuestion = (): Question => ({
+  prompt: '',
+  type: 'truefalse',
+  answers: [true, false],
+  correct: false,
+});
 
 const CreateTopic = ({ premade }: { premade: boolean }) => {
 
@@ -12,63 +20,90 @@ const CreateTopic = ({ premade }: { premade: boolean }) => {
   const [description, setDescription] = useState('');
   const [content, setContent] = useState('');
   const [numQuestions, setNumQuestions] = useState(5);
-  type QuestionForm = {
-    prompt: string;
-    answer: boolean | null;   // null  = not chosen yet
-  };
-
-  const emptyQuestion = (): QuestionForm => ({ prompt: '', answer: null });
-
-  const [questions, setQuestions] = useState<QuestionForm[]>(
-    Array(5).fill(null).map(emptyQuestion)
+  const [questions, setQuestions] = useState<Question[]>(
+    Array(numQuestions).fill(null).map(emptyQuestion)
   );
 
   useEffect(() => {
+
+    //load updated information if updating topic
     async function loadPost() {
       if (!premade || !id) return;
-
       const data: Topic = await getTopic(id);
       setTitle(data.title);
       setDescription(data.description);
       setContent(data.content);
-
       setQuestions(
         data.questions.map((q) => ({
           prompt: q.prompt,
-          answer: q.answer,          // true / false boolean
+          type: q.type,
+          answers: q.answers,
+          correct: q.correct,
         })))
+    }
 
-    }
     loadPost();
+
+    //determine number of questions
     setQuestions((prev) => {
-    const next = [...prev];
-    if (next.length < numQuestions) {
-      // Add empty questions
-      for (let i = next.length; i < numQuestions; i++) {
-        next.push({ prompt: '', answer: null });
+      const next = [...prev];
+      if (next.length < numQuestions) {
+        // Add empty questions
+        for (let i = next.length; i < numQuestions; i++) {
+          next.push(emptyQuestion());
+        }
+      } else if (next.length > numQuestions) {
+        // Remove extra questions
+        next.length = numQuestions;
       }
-    } else if (next.length > numQuestions) {
-      // Remove extra questions
-      next.length = numQuestions;
-    }
-    return next;
-  });
+      return next;
+    });
   }, [numQuestions]);
 
+  function handleTypeChange(i: number, newType: "truefalse" | "multiple") {
+    setQuestions(prev => {
+      const next = [...prev];
+      if (newType === "truefalse") {
+        next[i] = {
+          ...next[i],
+          type: "truefalse",
+          answers: [true, false],
+          correct: false,
+        };
+      } else {
+        next[i] = {
+          ...next[i],
+          type: "multiple",
+          answers: ['', '', '', ''],
+          correct: '',
+        };
+      }
+      return next;
+    });
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
+    for (const [idx, q] of questions.entries()) {
+      if (q.type === "multiple") {
+        const answers = (q.answers as string[]).map(ans => ans.trim());
+        const nonEmpty = answers.filter(ans => ans !== "");
+        const unique = new Set(nonEmpty);
+        if (nonEmpty.length !== unique.size) {
+          alert(`Duplicate answers found in Question ${idx + 1}. Please ensure all answers are unique.`);
+          return;
+        }
+      }
+    }
+
     let submitObject = {
-      title:title,
-      description:description,
-      content:content,
+      title: title,
+      description: description,
+      content: content,
       dateCreated: new Date(),
-      questions: questions.map((q) => ({
-        prompt: q.prompt,
-        answer: q.answer as boolean,   // now safely non‑null
-      })),
-    };
+      questions
+    }
 
     if (!premade || !id) {
       try {
@@ -119,25 +154,25 @@ const CreateTopic = ({ premade }: { premade: boolean }) => {
         required
       />
 
-<label>
-    Number of Questions: {numQuestions}
-    <input
-      type="range"
-      min={2}
-      max={10}
-      value={numQuestions}
-      onChange={e => setNumQuestions(Number(e.target.value))}
-      style={{ width: 200, marginLeft: 10 }}
-    />
-  </label>
+      <label>
+        Number of Questions: {numQuestions}
+        <input
+          type="range"
+          min={2}
+          max={10}
+          value={numQuestions}
+          onChange={e => setNumQuestions(Number(e.target.value))}
+          style={{ width: 200, marginLeft: 10 }}
+        />
+      </label>
 
       {questions.map((q, i) => (
         <div key={i} className="question-block">
           <label>Question {i + 1}:</label>
           <input
             value={q.prompt}
-            onChange={(e) =>
-              setQuestions((prev) => {
+            onChange={e =>
+              setQuestions(prev => {
                 const next = [...prev];
                 next[i] = { ...next[i], prompt: e.target.value };
                 return next;
@@ -146,45 +181,102 @@ const CreateTopic = ({ premade }: { premade: boolean }) => {
             required
           />
 
-          <div className="true-false">
-            <label className="label">Correct answer&nbsp;</label>
+          <label>
+            Type:
+            <select
+              value={q.type}
+              onChange={e =>
+                handleTypeChange(i, e.target.value as "truefalse" | "multiple")
+              }
+            >
+              <option value="truefalse">True/False</option>
+              <option value="multiple">Multiple Choice</option>
+            </select>
+          </label>
 
-            <label>
-              <input
-                type="radio"
-                name={`answer-${i}`}     // **unique group per question**
-                value="true"
-                checked={q.answer === true}
-                onChange={() =>
-                  setQuestions((prev) => {
-                    const next = [...prev];
-                    next[i] = { ...next[i], answer: true };
-                    return next;
-                  })
-                }
-                required
-              />
-              True
-            </label>
+          {q.type === "truefalse" && (
+            <div className="true-false">
+              <label className="label">Correct answer&nbsp;</label>
+              <label>
+                <input
+                  type="radio"
+                  name={`correct-${i}`}
+                  value="true"
+                  checked={q.correct === true}
+                  onChange={() =>
+                    setQuestions(prev => {
+                      const next = [...prev];
+                      next[i] = { ...next[i], correct: true };
+                      return next;
+                    })
+                  }
+                  required
+                />
+                True
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name={`correct-${i}`}
+                  value="false"
+                  checked={q.correct === false}
+                  onChange={() =>
+                    setQuestions(prev => {
+                      const next = [...prev];
+                      next[i] = { ...next[i], correct: false };
+                      return next;
+                    })
+                  }
+                  required
+                />
+                False
+              </label>
+            </div>
+          )}
 
-            <label>
-              <input
-                type="radio"
-                name={`answer-${i}`}
-                value="false"
-                checked={q.answer === false}
-                onChange={() =>
-                  setQuestions((prev) => {
-                    const next = [...prev];
-                    next[i] = { ...next[i], answer: false };
-                    return next;
-                  })
-                }
-                required
-              />
-              False
-            </label>
-          </div>
+          {q.type === "multiple" && Array.isArray(q.answers) && typeof q.answers[0] === "string" && (
+            <div className="multiple-choice">
+              {[0, 1, 2, 3].map(j => (
+                <div key={j}>
+                  <label>Answer {j + 1}:</label>
+                  <input
+                    value={(q.answers as string[])[j]}
+                    onChange={e =>
+                      setQuestions(prev => {
+                        const next = [...prev];
+                        const answers = [...(next[i].answers as string[])];
+                        answers[j] = e.target.value;
+                        next[i] = { ...next[i], answers };
+                        return next;
+                      })
+                    }
+                    required
+                  />
+                </div>
+              ))}
+              <label>
+                Correct Answer:
+                <select
+  value={q.correct === '' ? '' : String(q.correct)}
+  onChange={e =>
+    setQuestions(prev => {
+      const next = [...prev];
+      next[i] = { ...next[i], correct: Number(e.target.value) };
+      return next;
+    })
+  }
+  required
+>
+  <option value="">Select</option>
+  {[0, 1, 2, 3].map(idx => (
+    <option key={idx} value={idx}>
+      {`Answer ${idx + 1}`}
+    </option>
+  ))}
+</select>
+              </label>
+            </div>
+          )}
         </div>
       ))}
 

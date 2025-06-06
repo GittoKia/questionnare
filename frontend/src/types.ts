@@ -2,7 +2,9 @@
 
 export type Question ={
   prompt: string;
-  answer: boolean;
+  type:"truefalse"|"multiple";
+  answers:string[]|[true,false];
+  correct: string|boolean;
 }
 
 export type Topic ={
@@ -30,6 +32,9 @@ export type OneTopicProps= {
   topic: Topic;
 }
 
+export type QuestionProps={
+  question:Question
+}
 export type AllTopicsProps= {
   topics: Topic[];
 }
