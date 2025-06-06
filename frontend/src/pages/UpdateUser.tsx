@@ -1,8 +1,7 @@
 import { verifyUser, updateUser, getUser } from "../api"
-import { type User } from "../types"
+import { type User,useLogout } from "../types"
 import { useParams } from "react-router-dom"
 import { useState, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
 const UpdateUser = () => {
     const [basicuser, setBasicUser] = useState({
         email: "",
@@ -12,7 +11,7 @@ const UpdateUser = () => {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("")
     const { id } = useParams<{ id: string }>();
-const navigate=useNavigate()
+    const logout=useLogout()
     useEffect(() => {
         async function loadPost() {
             const data: User = await getUser(id);
@@ -33,7 +32,7 @@ const navigate=useNavigate()
                 user.email = email
                 user.password = password
                 await updateUser(id, user);
-            navigate("/home")}
+            logout()}
                 
                 else{
                     alert("Data retrieval failed")

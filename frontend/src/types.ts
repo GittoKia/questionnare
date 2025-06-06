@@ -81,3 +81,14 @@ export function timeBefore(date:Date):string{
   return `${value} ${unit}${plural} ago`;
 }
 
+import { useNavigate } from 'react-router-dom'
+
+export function useLogout() {
+  const navigate = useNavigate()
+  console.log('wahey')
+  return () => {
+    sessionStorage.removeItem('User')
+    navigate('/')
+    
+  }
+}

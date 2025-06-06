@@ -1,12 +1,11 @@
 import '../styles/Navbar.scss'
 import { NavLink } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
 import * as jwt_decode from 'jwt-decode'
 import { useMemo } from 'react'
-
+import { useLogout } from '../types'
 const Navbar = () => {
-  const navigate = useNavigate()
   const t = sessionStorage.getItem("User")
+  const logout=useLogout()
   const userId = useMemo(() => {
     if (t) {
       try {
@@ -18,11 +17,6 @@ const Navbar = () => {
     }
     return null
   }, [t])
-
-  function handleLogout() {
-    sessionStorage.removeItem("User")
-    navigate("/")
-  }
 
   return (
     <div className='navbar'>
@@ -42,7 +36,7 @@ const Navbar = () => {
         to="/createTopic"
         className='n'
       >Blog</NavLink>
-      <button onClick={handleLogout}>Logout</button>
+      <button onClick={logout}>Logout</button>
     </div>
   )
 }
