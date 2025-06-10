@@ -1,6 +1,5 @@
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import * as jwt_decode from 'jwt-decode'
-import type { User } from '../types';
 import { addToUser } from '../api';
 import { useEffect } from 'react';
 import '../styles/Result.scss'
