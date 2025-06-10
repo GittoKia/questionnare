@@ -54,7 +54,7 @@ topicRoutes.route("/topics/:id").put(verifyToken,async (request, response) => {
             title: request.body.title,
             description: request.body.description,
             content: request.body.content,
-            author: request.author,
+            author: request.user._id,
             dateCreated:request.body.dateCreated,
             questions:request.body.questions
         }

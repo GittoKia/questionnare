@@ -1,0 +1,35 @@
+@mixin alternate($alter:false) {
+  @if $alter{
+    background-color:black;
+    color:white;
+  }
+  @else{
+    background-color:white;
+    color:black;
+  }
+}
+
+
+.btnGrou{
+    display:flex;
+    flex-direction:column;
+    
+    gap:1rem;
+
+  button{
+    width:20vw;
+    border: rgb(53, 53, 53) 0.2rem solid;
+    border-radius:1rem;
+  }}
+  .submi{
+@include alternate(true);
+  }
+  .typ{
+@include alternate();
+  }
+  .submi:hover{
+@include alternate();
+  }
+  .typ:hover{
+@include alternate(true);
+  }

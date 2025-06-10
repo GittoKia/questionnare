@@ -23,7 +23,7 @@ export type User ={
   password?:string;
   email: string;
   joinDate:string;
-  visitedPosts?:[string, number][] 
+  visitedPosts?:[string, number,number][] 
 }
 
 /*Returns*/ 

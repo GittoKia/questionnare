@@ -32,7 +32,7 @@ const Result = () => {
       if ((solverId!=decodedUser._id)) {
         
         // Only send the new entry to be appended by the backend
-        const newVisitedPost = [id, correct];
+        const newVisitedPost = [id, correct,total];
         let submitUser = {
           visitedPosts: [newVisitedPost]
         };

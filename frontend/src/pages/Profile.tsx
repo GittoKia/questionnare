@@ -65,13 +65,14 @@ async function handleUpdate(e: React.FormEvent<HTMLButtonElement>
           <TopicCard topic={topic}/>
           <h2>
             {
-              user.visitedPosts?.find(([id]) => id === topic._id)?.[1]
+             String( user.visitedPosts?.find(([id]) => id === topic._id)?.[1])+"/"+String( user.visitedPosts?.find(([id]) => id === topic._id)?.[2])
             }
           </h2>
-          <button onClick={handleUpdate}>Update Profile</button>
+          
           </div>
         )
       })}
+      <button onClick={handleUpdate}>Update Profile</button>
     </div>
     )
 }

@@ -20,6 +20,12 @@ const Question = () => {
       const data = await getTopic(id);
       setTopic(data);
     })();
+    return () => {
+      if(Number(q)!=1){
+      setCorrect(0);
+      setTopic(null);}
+      //navigate(`/topic/${id}`)
+    }
   }, []);
 
   /* guard first paint */

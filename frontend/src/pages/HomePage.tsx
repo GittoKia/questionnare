@@ -21,7 +21,7 @@ const HomePage = () => {
     }, [])
 
     return (
-        <div>
+        <div className='home'>
             {loading ? (<Spinner loading={loading} />) : (
                 <div className='Cards'>
                     {topics.map((t) => (

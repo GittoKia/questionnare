@@ -9,8 +9,8 @@ const Navbar = () => {
   const userId = useMemo(() => {
     if (t) {
       try {
-        const decoded = jwt_decode.jwtDecode<{ _id: string }>(t)
-        return decoded._id
+        const decoded = jwt_decode.jwtDecode<{ _id: string,name:string }>(t)
+        return decoded._id,decoded.name
       } catch {
         return null
       }
@@ -29,13 +29,17 @@ const Navbar = () => {
         className='n'
       >About</NavLink>
       <NavLink
-        to={userId ? `/profile/${userId}` : "/"}
-        className='n'
-      >Profile</NavLink>
-      <NavLink
         to="/createTopic"
         className='n'
       >Blog</NavLink>
+      <NavLink
+        to="/contact"
+        className='n'
+      >Contact</NavLink>
+      <NavLink
+        to={userId ? `/profile/${userId}` : "/"}
+        className='n'
+      >{userId}</NavLink>
       <button onClick={logout}>Logout</button>
     </div>
   )

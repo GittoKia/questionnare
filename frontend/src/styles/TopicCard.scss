@@ -1,30 +1,31 @@
 .topicCard {
-  max-width: 420px;  /* pick any width that looks good */
-  margin:0;
-  width: 100%;
-}
+  
+  width: auto;
+  height: auto;
 
-/* purely cosmetic examples */
-.topicCard a {
-  display: block;            /* whole card is clickable */
+  /* purely cosmetic examples */
+
+  display: block; /* whole card is clickable */
   background: #c1e6f1;
   border: 2px solid #002334;
   border-radius: 6px;
-  padding: 1rem;
   text-decoration: none;
+  text-align: center;
+  padding:0 2rem 2rem;
+h1 h2 h3{
+  
 }
+  h1 {
+    font-size: 8vh;
+  }
 
-
-
-
-
-.topicCard h1 {
-  margin: 0 0 0.25rem;
-  font-size: 1.25rem;
-}
-
-.topicCard h2 {
-  margin: 0;
-  font-size: 1rem;
-  color: #333;
+  h2 {
+    font-size: 4vh;
+    color: #333;
+  }
+  h3{
+margin: 0;
+text-align: start;
+font-size:3vh;
+  }
 }

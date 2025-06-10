@@ -1,19 +1,19 @@
 import { useState } from "react"
 import CreateUser from "../components/CreateUser"
 import Login from "../components/Login"
-
+import '../styles/Landing.scss'
 const Landing = () => {
   const [view, setView] = useState(true)
+  const Switch = () => setView(!view);
   return (
-    <div className='flex justify-center items-center w-screen h-screen'>
+    <div className='both'>
+      <h1>{view ? "Sign In" : "Create Account"}</h1>
       {view ? 
-      <div className='flex flex-col w-96'>
-      <Login />
-      <button onClick={()=>setView(!view)}>Create New Account</button>
+      <div className='one login'>
+      <Login onSwitch={Switch}/>
       </div> : 
-      <div className='flex flex-col w-96'>
-      <CreateUser/>
-      <button onClick={()=>setView(!view)}>Login Existing Account</button>
+      <div className='one create'>
+      <CreateUser onSwitch={Switch}/>
       </div>}
     </div>
   )

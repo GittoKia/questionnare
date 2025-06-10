@@ -12,6 +12,7 @@ import CreateTopic from './pages/CreateTopic';
 import NotFoundPage from './pages/NotFoundPage';
 import Profile from './pages/Profile'
 import UpdateUser from './pages/UpdateUser';
+import Contact from './pages/Contact';
 import Footer from './components/Footer'
 import axios from 'axios';
 
@@ -32,6 +33,7 @@ const App = () => {
         <Route element={<MainLayout />}>
           <Route path='/home' element={<HomePage />} />
           <Route path='/about' element={<About />} />
+          <Route path='/contact' element={<Contact />} />
           <Route path='/profile/:id' element={<Profile />} />
           <Route path='/profile/:id/update' element={<UpdateUser />} />
           <Route path="/topic/:id" element={<ViewTopic />} />

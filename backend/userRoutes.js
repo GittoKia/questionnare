@@ -90,9 +90,17 @@ userRoutes.route("/users/:id").patch(async (request, response) => {
     }
     if (request.body.dateCreated !== undefined) updateFields.dateCreated = request.body.dateCreated
 
-    // If visitedPosts is provided as an array to append, use $push with $each
-    if (Array.isArray(request.body.visitedPosts)) {
-        updateQuery.$push = { visitedPosts: { $each: request.body.visitedPosts } }
+    // If visitedPosts is provided as an array to append, update or add entry
+    if (Array.isArray(request.body.visitedPosts) && request.body.visitedPosts.length === 1) {
+        // Fetch current user
+        const user = await db.collection("users").findOne({ _id: new ObjectId(request.params.id) });
+        if (user) {
+            // Hardcoded updateArray logic
+            const [key, correct,total] = request.body.visitedPosts[0];
+            const filtered = (user.visitedPosts || []).filter(([k]) => k !== key);
+            const updatedVisitedPosts = [...filtered, [key, correct,total]];
+            updateFields.visitedPosts = updatedVisitedPosts;
+        }
     }
 
     // If there are other fields to set, add $set

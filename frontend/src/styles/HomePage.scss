@@ -1,10 +1,12 @@
-/* HomePage.scss */
+
 .Cards {
   display: flex;
-  flex-direction: column;   /* one card per row            */
-  align-items: center;      /* centre each card horizontally */
+  flex-direction: row;  
+  flex-wrap: wrap; 
+  align-items: center; 
+  align-items: flex-start;     
   width:100vw;
   gap: 1.25rem;
-  margin-top:120px;
-  margin-inline: auto;      /* keep the whole column centred */
+  margin-top:20vh;
+  margin-inline: auto;      
 }

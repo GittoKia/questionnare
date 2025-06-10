@@ -2,7 +2,8 @@ import { verifyUser } from "../api"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import axios from "axios"
-const Login = () => {
+import '../styles/Login.scss'
+const Login: React.FC<{ onSwitch: () => void }> = ({ onSwitch }) =>  {
 
   const navigate = useNavigate()
   const [user, setUser] = useState({
@@ -31,7 +32,10 @@ const Login = () => {
     <form onSubmit={handleSubmit}>
       <input placeholder={"Email"} onChange={handleChange} name="email" required></input>
       <input placeholder={"Password"} onChange={handleChange} name="password" type='password' required></input>
-      <button type="submit" >Login</button>
+      <div className='btnGrou'>
+      <button type="submit" className='submi' >Login</button>
+      <button type="button" onClick={onSwitch} className='typ'>Create New Account</button>
+      </div>
     </form>
   )
 }
