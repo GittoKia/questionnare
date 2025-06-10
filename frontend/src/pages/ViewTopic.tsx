@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getTopic, deleteTopic,getUser } from '../api';
 import * as jwt_decode from 'jwt-decode'
-import Spinner from '../components/Spinner';
 import '../styles/Topic.scss'
 export const sleep = (ms: number) =>
   new Promise<void>(resolve => setTimeout(resolve, ms));
@@ -15,7 +14,6 @@ const ViewTopic = () => {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>();
   const [topic, setTopic] = useState<Topic>()
-  const [loading, setLoading] = useState(true)
   const[userName,setUserName]=useState("")
   const token=sessionStorage.getItem('User')
   let boole=false;
@@ -32,7 +30,6 @@ boole=(decodedToken._id==topic.author);}
       setUserName(user.name); // assumes user object has a 'name' property
     }
       await sleep(500);
-      setLoading(false)
     }
     loadPost()
   }, [])

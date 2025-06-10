@@ -13,7 +13,6 @@ import NotFoundPage from './pages/NotFoundPage';
 import Profile from './pages/Profile'
 import UpdateUser from './pages/UpdateUser';
 import Contact from './pages/Contact';
-import Footer from './components/Footer'
 import axios from 'axios';
 
 

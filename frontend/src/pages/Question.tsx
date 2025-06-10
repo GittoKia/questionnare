@@ -2,7 +2,7 @@ import { toast } from 'react-toastify';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getTopic } from '../api';
-import type { Topic, Question } from '../types';
+import type { Topic } from '../types';
 import '../styles/Question.scss';
 
 const Question = () => {
@@ -13,7 +13,6 @@ const Question = () => {
   const [correct, setCorrect] = useState(0);
   const [answered, setAnswered] = useState(false);
   const [selected, setSelected] = useState<null | boolean | number>(null);
-  const [wasCorrect, setWasCorrect] = useState<boolean | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -22,7 +21,6 @@ const Question = () => {
     })();
     setAnswered(false);
     setSelected(null);
-    setWasCorrect(null);
   }, [id, q]);
 
   if (!topic) return null;
@@ -35,7 +33,6 @@ const Question = () => {
     if (answered) return;
     setSelected(guess);
     const isCorrect = guess === current.correct;
-    setWasCorrect(isCorrect);
     setAnswered(true);
     toast[isCorrect ? 'success' : 'error'](isCorrect ? 'Correct!' : 'Incorrect.');
     if (isCorrect) setCorrect(c => c + 1);

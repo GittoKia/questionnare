@@ -1,4 +1,4 @@
-import { useState, useEffect, FormEvent } from 'react';
+import { useState, useEffect, type FormEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { createTopic, getTopic, updateTopic } from '../api';
 import type { Topic, Question } from '../types';
@@ -109,13 +109,6 @@ const CreateTopic = ({ premade }: { premade: boolean }) => {
       // (optional) toast/snackbar
     }
   }
-  const handleRange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const n = parseInt(e.target.value, 10);
-    setNumQuestions(n);
-
-    // NEW: update CSS var so the gradient moves
-    e.target.style.setProperty("--val", String(n));
-  };
 
   /* ────────────── JSX ───────────────── */
   return (
@@ -251,7 +244,7 @@ const CreateTopic = ({ premade }: { premade: boolean }) => {
                       onChange={e => {
                         setQuestions(prev => {
                           const next = [...prev];
-                          next[i] = { ...next[i], correct: Number(e.target.value) }; // store index 0‑3
+                          next[i] = { ...next[i], correct: e.target.value }; // store index 0‑3 as string
                           return next;
                         });
                       }}
