@@ -1,0 +1,86 @@
+/* src/styles/Contact.scss */
+
+/* --------------------------------------------------------- */
+/*  Page wrapper                                              */
+/* --------------------------------------------------------- */
+
+.contact {
+  max-width: 40rem;                 /* 640px */
+  margin-inline: auto;
+  padding: calc(var(--navbar-height, 56px) + 2rem) 1rem 4rem;
+  /* Fallback for browsers that do not support CSS variables */
+  @supports not (padding: calc(var(--navbar-height, 56px) + 2rem) 1rem 4rem) {
+    padding: 4rem 1rem 4rem;
+  }
+}
+
+/* --------------------------------------------------------- */
+/*  Form container                                            */
+/* --------------------------------------------------------- */
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,.05);
+}
+
+.form-container label {
+  font-size: 0.875rem;              /* 14px */
+  font-weight: 600;
+  color: #374151;                   /* zinc-700 */
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.form-container input,
+.form-container textarea {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+.form-container input:focus,
+.form-container textarea:focus {
+  outline: 2px solid #0d9488;        /* teal-600 */
+  outline-offset: 1px;
+}
+
+/* --------------------------------------------------------- */
+/*  Submit button                                             */
+/* --------------------------------------------------------- */
+
+.form-container button {
+  width: 100%;
+  background: #0d9488;              /* teal-600 */
+  color: #ffffff;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s ease;
+}
+
+.form-container button:hover {
+  background: #0f766e;              /* teal-700 */
+}
+
+/* --------------------------------------------------------- */
+/*  Responsive tweak                                          */
+/* --------------------------------------------------------- */
+
+@media (max-width: 480px) {
+  .form-container {
+    padding: 1.5rem 1rem;
+  }
+}

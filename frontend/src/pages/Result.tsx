@@ -3,6 +3,7 @@ import * as jwt_decode from 'jwt-decode'
 import type { User } from '../types';
 import { addToUser } from '../api';
 import { useEffect } from 'react';
+import '../styles/Result.scss'
 type ResultState = { correct: number; total: number };
 
 type ResultProps = { solverId: string };
@@ -47,31 +48,38 @@ const Result = () => {
     updateUserData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+let emoji = "🎉";
+  const ratio = correct / total;
+  if (ratio <= 0.25) {
+    emoji = "❌";
+  } else if (ratio <= 0.75) {
+    emoji = "👍";
+  } else {
+    emoji = "🎉";
+  }
+ return (
+  <div className="result">
+    <h1 className="result__score">
+      You got {correct} / {total} right! {emoji}
+    </h1>
 
-  return (
-    <div className="mt-8 text-center">
-      <h1 className="text-2xl font-bold">
-        You got {correct} / {total} right! 🎉
-      </h1>
+    <div className="result__cta">
+      <button
+        className="result__button result__button--primary"
+        onClick={() => navigate(`/topic/${id}`, { replace: true })}
+      >
+        Play again
+      </button>
 
-      <div className="mt-6 flex justify-center gap-4">
-        {/* play again = start same quiz from Q1 */}
-        <button
-          className="rounded bg-blue-600 px-4 py-2 font-medium text-white"
-          onClick={() => navigate(`/topic/${id}`, { replace: true })}
-        >
-          Play again
-        </button>
-
-        <Link
-          to="/home"
-          className="rounded bg-gray-200 px-4 py-2 font-medium text-gray-800"
-        >
-          Home
-        </Link>
-      </div>
+      <Link
+        to="/home"
+        className="result__button result__button--secondary"
+      >
+        Home
+      </Link>
     </div>
-  );
+  </div>
+);
 };
 
 export default Result;

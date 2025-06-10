@@ -1,12 +1,10 @@
+.home {
+  padding: 2rem 1rem;             /* page gutters */
+}
 
 .Cards {
-  display: flex;
-  flex-direction: row;  
-  flex-wrap: wrap; 
-  align-items: center; 
-  align-items: flex-start;     
-  width:100vw;
-  gap: 1.25rem;
-  margin-top:20vh;
-  margin-inline: auto;      
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  align-items: stretch;           /* every card same height if content allows */
 }

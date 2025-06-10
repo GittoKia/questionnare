@@ -22,7 +22,7 @@ export type User ={
   name: string;
   password?:string;
   email: string;
-  joinDate:string;
+  dateCreated:Date;
   visitedPosts?:[string, number,number][] 
 }
 
@@ -42,7 +42,7 @@ export type AllTopicsProps= {
 /*Functions*/
 
 export function convertDate(date:Date):string{
-  return date.toString().slice(4,15)
+  return date.toString().slice(0,10)
 }
 
 export function timeBefore(date:Date):string{

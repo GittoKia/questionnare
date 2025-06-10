@@ -1,0 +1,96 @@
+/* src/styles/UpdateUser.scss */
+
+/* ──────────────────────────────────────────────────────────── */
+/*  Wrapper — centres the form card on the page                */
+/* ──────────────────────────────────────────────────────────── */
+
+.updateUser {
+  min-height: calc(100vh - 4rem);  /* full view minus navbar */
+  padding: 1rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #f9fafb;             /* zinc‑50 */
+}
+
+/* ──────────────────────────────────────────────────────────── */
+/*  Card container                                             */
+/* ──────────────────────────────────────────────────────────── */
+
+.updateUser__card {
+  width: 100%;
+  max-width: 26rem;                /* ≈ 416 px */
+  padding: 2rem 2.5rem;
+
+  background: #ffffff;
+  border: 1px solid #e5e7eb;       /* zinc‑200 */
+  border-radius: 0.75rem;          /* 12 px */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* ──────────────────────────────────────────────────────────── */
+/*  Form layout                                                */
+/* ──────────────────────────────────────────────────────────── */
+
+.updateUser__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;                    /* 20 px between fields */
+}
+
+/* Labels (if you add <label> elements) ---------------------- */
+.updateUser__label {
+  font-size: 0.875rem;             /* 14 px */
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #374151;                  /* zinc‑700 */
+  margin-bottom: 0.25rem;
+}
+
+/* Input fields ---------------------------------------------- */
+.updateUser__input {
+  padding: 0.625rem 0.75rem;       /* 10 px top‑bottom, 12 px sides */
+  font-size: 1rem;                 /* 16 px */
+  border: 1px solid #d1d5db;       /* zinc‑300 */
+  border-radius: 0.5rem;           /* 8 px */
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+  &:focus {
+    border-color: #6366f1;         /* indigo‑500 */
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+  }
+}
+
+/* Submit button --------------------------------------------- */
+.updateUser__submit {
+  margin-top: 0.5rem;
+  padding: 0.75rem 1.25rem;        /* 12 px top‑bottom, 20 px sides */
+  font-size: 1rem;
+  font-weight: 500;
+  color: #ffffff;
+  background: #6366f1;             /* indigo‑500 */
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: #4f46e5;           /* indigo‑600 */
+  }
+
+  &:disabled {
+    background: #c7d2fe;           /* indigo‑200 */
+    cursor: not-allowed;
+  }
+}
+
+/* Optional helper / error text ------------------------------ */
+.updateUser__error {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;              /* 12 px */
+  color: #dc2626;                  /* red‑600 */
+}

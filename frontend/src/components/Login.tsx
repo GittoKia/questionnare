@@ -2,7 +2,7 @@ import { verifyUser } from "../api"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import axios from "axios"
-import '../styles/Login.scss'
+import "../styles/Auth.scss";
 const Login: React.FC<{ onSwitch: () => void }> = ({ onSwitch }) =>  {
 
   const navigate = useNavigate()
@@ -28,16 +28,34 @@ const Login: React.FC<{ onSwitch: () => void }> = ({ onSwitch }) =>  {
     setUser({ ...user, [e.target.name]: e.target.value })
   }
 
-  return (
-    <form onSubmit={handleSubmit}>
-      <input placeholder={"Email"} onChange={handleChange} name="email" required></input>
-      <input placeholder={"Password"} onChange={handleChange} name="password" type='password' required></input>
-      <div className='btnGrou'>
-      <button type="submit" className='submi' >Login</button>
-      <button type="button" onClick={onSwitch} className='typ'>Create New Account</button>
+   return (
+    <form onSubmit={handleSubmit} className="auth__form">
+      <input
+        className="auth__input"
+        placeholder="Email"
+        onChange={handleChange}
+        name="email"
+        required
+        maxLength={30}
+      />
+      <input
+        className="auth__input"
+        placeholder="Password"
+        onChange={handleChange}
+        name="password"
+        type="password"
+        required
+        maxLength={20}
+      />
+
+      <div className="auth__buttons">
+        <button type="submit" className="auth__submit">Login</button>
+        <button type="button" onClick={onSwitch} className="auth__switch">
+          Create Account
+        </button>
       </div>
     </form>
-  )
+  );
 }
 
 export default Login

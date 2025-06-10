@@ -31,16 +31,16 @@ const Navbar = () => {
       <NavLink
         to="/createTopic"
         className='n'
-      >Blog</NavLink>
+      >Create</NavLink>
       <NavLink
         to="/contact"
         className='n'
       >Contact</NavLink>
       <NavLink
         to={userId ? `/profile/${userId}` : "/"}
-        className='n'
+        className='border n'
       >{userId}</NavLink>
-      <button onClick={logout}>Logout</button>
+      <button className="logout" onClick={logout}>Logout</button>
     </div>
   )
 }

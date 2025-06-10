@@ -40,7 +40,7 @@ userRoutes.route("/users").post(async (request, response) => {
 
     const takenEmail = await db.collection("users").findOne({ email: request.body.email })
 
-    if (takenEmail) { response.json({ message: "The email is taken" }) }
+    if (takenEmail) {return response.status(409).json({ success: false, message: "The email is taken" }); }
     else {
         const hash = await bcrypt.hash(request.body.password, SALT_ROUNDS)
         let mongoObject = {
@@ -67,7 +67,7 @@ userRoutes.route("/users/:id").put(async (request, response) => {
             name: request.body.name,
             email: request.body.email,
             password: hash,
-            dateCreated:request.body.joinDate,
+            dateCreated:request.body.dateCreated,
             visitedPosts:request.body.visitedPosts
         }
     }

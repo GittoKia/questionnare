@@ -1,15 +1,118 @@
-.topic{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    padding-top:100px;
-    max-width:400px;
-    text-align:center;
-    h1{
-        font-size:30px;
-        color:blue;
-    }
-    h2{
-        font-size:20px;
-    }
+/* src/styles/Topic.scss */
+
+/* ──────────────────────────────────────────────────────────── */
+/*  Page wrapper                                                */
+/* ──────────────────────────────────────────────────────────── */
+
+.topic {
+  max-width: 48rem;                 /* 768 px */
+  margin-inline: auto;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ──────────────────────────────────────────────────────────── */
+/*  Back button                                                 */
+/* ──────────────────────────────────────────────────────────── */
+
+.topic__back {
+  align-self: start;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;              /* 14 px */
+  font-weight: 500;
+  color: #374151;                   /* zinc‑700 */
+  background: #f3f4f6;              /* zinc‑100 */
+  border: 1px solid #e5e7eb;        /* zinc‑200 */
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: #e5e7eb;            /* zinc‑200 */
+  }
+}
+
+/* ──────────────────────────────────────────────────────────── */
+/*  Headings & body                                             */
+/* ──────────────────────────────────────────────────────────── */
+
+.topic__title {
+  margin: 0;
+  font-size: 2rem;                  /* 32 px */
+  font-weight: 600;
+  color: #111827;                   /* zinc‑900 */
+}
+
+.topic__subtitle {
+  margin: 0;
+  font-size: 1.25rem;               /* 20 px */
+  font-weight: 400;
+  color: #374151;                   /* zinc‑700 */
+}
+
+.topic__content {
+  margin: 0;
+  font-size: 1rem;                  /* 16 px */
+  line-height: 1.625;
+  color: #374151;
+  white-space: pre-line;            /* respect line breaks */
+}
+
+.topic__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  font-size: 0.875rem;              /* 14 px */
+  color: #6b7280;                   /* zinc‑500 */
+}
+
+/* ──────────────────────────────────────────────────────────── */
+/*  CTA buttons                                                 */
+/* ──────────────────────────────────────────────────────────── */
+
+.topic__cta {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.topic__button {
+  padding: 0.65rem 1.25rem;
+  font-size: 0.875rem;              /* 14 px */
+  font-weight: 500;
+  color: #ffffff;
+  background: #6366f1;             /* indigo‑500 */
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: #4f46e5;           /* indigo‑600 */
+  }
+}
+
+.topic__button--danger {
+  background: #ef4444;              /* red‑500 */
+
+  &:hover {
+    background: #dc2626;            /* red‑600 */
+  }
+}
+
+/* ──────────────────────────────────────────────────────────── */
+/*  Start link styled like a button                             */
+/* ──────────────────────────────────────────────────────────── */
+
+.topic__start {
+  @extend .topic__button;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }

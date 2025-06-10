@@ -67,26 +67,43 @@ boole=(decodedToken._id==topic.author);}
 
   //return topic information
   if (!topic) return null;
-  return (
-    <div>
-      {loading ? (<Spinner loading={loading} />) : (
-        <div className='topic'>
-          <button onClick={() => navigate("/home")}>Back</button>
-          <h1>{topic.title}</h1>
-          <h2>{topic.description}</h2>
-          <p>{topic.content}</p>
-          <h3>{convertDate(new Date(topic.dateCreated))}</h3>
-          <h3>{userName}</h3>
-          <Link to={`/topic/${topic._id}/question/1`}>Start</Link>
-          {boole ? (
-            <div>
-              <button onClick={handleUpdate}>Update Topic</button>
-              <button onClick={handleDelete}>Delete Topic</button>
-            </div>
-          ) : null}
-        </div>)}
+ return (
+  <div className="topic">
+    <button onClick={() => navigate("/home")} className="topic__back">
+      ← Back
+    </button>
+
+    <h1 className="topic__title">{topic.title}</h1>
+    <h2 className="topic__subtitle">{topic.description}</h2>
+
+    <p className="topic__content">{topic.content}</p>
+
+    <div className="topic__meta">
+      <span>{convertDate(new Date(topic.dateCreated))}</span>
+      <span>by {userName}</span>
     </div>
-  );
+
+    <div className="topic__cta">
+      <Link to={`/topic/${topic._id}/question/1`} className="topic__start">
+        Start
+      </Link>
+
+      {boole && (
+        <>
+          <button onClick={handleUpdate} className="topic__button">
+            Update Topic
+          </button>
+          <button
+            onClick={handleDelete}
+            className="topic__button topic__button--danger"
+          >
+            Delete Topic
+          </button>
+        </>
+      )}
+    </div>
+  </div>
+);
 }
 
 export default ViewTopic

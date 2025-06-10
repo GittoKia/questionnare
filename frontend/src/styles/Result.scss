@@ -1,0 +1,70 @@
+/* src/styles/Result.scss */
+
+/* ──────────────────────────────────────────────────────────── */
+/*  Wrapper — full‑height flex centre                           */
+/* ──────────────────────────────────────────────────────────── */
+
+.result {
+  min-height: calc(100vh - 4rem);    /* subtract navbar if any */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  gap: 2.5rem;
+}
+
+/* ──────────────────────────────────────────────────────────── */
+/*  Score heading                                              */
+/* ──────────────────────────────────────────────────────────── */
+
+.result__score {
+  margin: 0;
+  font-size: 2rem;                   /* 32 px */
+  font-weight: 700;
+  color: #111827;                    /* zinc‑900 */
+  text-align: center;
+}
+
+/* ──────────────────────────────────────────────────────────── */
+/*  CTA buttons                                                */
+/* ──────────────────────────────────────────────────────────── */
+
+.result__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.result__button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;                   /* 16 px */
+  font-weight: 500;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  text-decoration: none;             /* for <Link> */
+}
+
+/* Primary = indigo */
+.result__button--primary {
+  color: #ffffff;
+  background: #6366f1;               /* indigo‑500 */
+  border: none;
+
+  &:hover {
+    background: #4f46e5;             /* indigo‑600 */
+  }
+}
+
+/* Secondary = light gray */
+.result__button--secondary {
+  color: #374151;                    /* zinc‑700 */
+  background: #e5e7eb;               /* zinc‑200 */
+  border: 1px solid #d1d5db;         /* zinc‑300 */
+
+  &:hover {
+    background: #d1d5db;             /* zinc‑300 */
+  }
+}

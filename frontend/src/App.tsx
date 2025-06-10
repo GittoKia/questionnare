@@ -20,16 +20,18 @@ import axios from 'axios';
 const App = () => {
 
 
-  useEffect(()=>{
-    let token=sessionStorage.getItem("User")
-    if (token){
-    axios.defaults.headers.common['Authorization']=`Bearer ${token}`}
-  },[])
+  useEffect(() => {
+    document.title = "Questionnare";
+    let token = sessionStorage.getItem("User")
+    if (token) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    }
+  }, [])
   //define routes
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
-      <Route path='/' element={<Landing />} />
+        <Route path='/' element={<Landing />} />
         <Route element={<MainLayout />}>
           <Route path='/home' element={<HomePage />} />
           <Route path='/about' element={<About />} />
@@ -37,10 +39,10 @@ const App = () => {
           <Route path='/profile/:id' element={<Profile />} />
           <Route path='/profile/:id/update' element={<UpdateUser />} />
           <Route path="/topic/:id" element={<ViewTopic />} />
-          <Route path="/topic/:id/result" element={<Result/>} />
-          <Route path="/createTopic" element={<CreateTopic premade={false}/>}/>
-          <Route path="/topic/:id/update" element={<CreateTopic premade={true}/>}/>
-          <Route path='*' element={<NotFoundPage />}/>
+          <Route path="/topic/:id/result" element={<Result />} />
+          <Route path="/createTopic" element={<CreateTopic premade={false} />} />
+          <Route path="/topic/:id/update" element={<CreateTopic premade={true} />} />
+          <Route path='*' element={<NotFoundPage />} />
         </Route>
         <Route path='/topic/:id/question/:q' element={<Question />} />
       </>
@@ -50,8 +52,27 @@ const App = () => {
 
   return <>
     <RouterProvider router={router} />
-    <ToastContainer position="top-center" autoClose={2000} hideProgressBar pauseOnHover={false}/>
-    
+    <ToastContainer
+  position="bottom-center"
+  autoClose={1000}
+  hideProgressBar
+  pauseOnHover={false}
+  newestOnTop
+  closeButton={false}
+  icon={false}
+  toastClassName={(context) =>
+    context?.type === "error"
+      ? "toast-error"
+      : "toast-success"
+  }
+  toastStyle={{
+    fontWeight: 500,
+    borderRadius: "0.5rem",
+    boxShadow: "0 4px 8px rgba(0,0,0,0.06)",
+    padding: "0.75rem 1rem",
+  }}
+/>
+
   </>
 }
 

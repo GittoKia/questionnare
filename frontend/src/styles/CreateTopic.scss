@@ -1,56 +1,211 @@
-form {
-  margin-block: 0;
-  padding: 0;
-  width: 100vw;
-  margin-top: 10vh;
+/* --------------- layout -------------- */
+/* ----------------------------------------------------------- */
+
+/* Make label + select act as a single chunk */
+.question-block .correct-ans {   /* note the parent selector */
   display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+.create-topic {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+  padding: calc(var(--navbar-height, 56px) + 1rem) 1rem 2rem; // clears sticky navbar
+}
 
-  .topic-info {
+/* ---------- sidebar / topic info ----- */
+.topic-info {
+  flex: 0 0 320px;            // fixed width
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1.25rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  position: sticky;           // stays in view while scrolling
+  top: calc(var(--navbar-height, 56px) + 1rem);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+
+  label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: #374151;
+  }
+
+  input,
+  textarea,
+  select {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    &:focus {
+      outline: 2px solid #0d9488;
+      outline-offset: 1px;
+    }
+  }
+}
+
+.slider {
+  input[type='range'] {
+    width: 100%;
+  }
+  /*  Custom “progress” fill for the 3 → 9 range slider          */
+/* ----------------------------------------------------------- */
+
+.field.slider {
+  margin-bottom: 1rem;
+}
+
+/* the actual slider */
+#qRange {
+  --min: 3;
+  --max: 9;
+  --val: 5;                      /* overwritten from React */
+
+  /* lay it out exactly like an input but WITHOUT borders */
+  display: block;
+  width: 100%;
+  padding: 0 8px;                /* 8 px = half thumb width */
+  height: 6px;                   /* track thickness */
+  box-sizing: border-box;        /* padding is inside the width */
+  border: none;                  /* no border at rest */
+  background: #d1d5db;           /* track base colour */
+  border-radius: 3px;
+
+  /* progress bar */
+  background-image: linear-gradient(#0ea5e9, #0ea5e9);
+  background-size: calc(
+      (var(--val) - var(--min)) / (var(--max) - var(--min)) * 100%
+    ) 100%;
+  background-repeat: no-repeat;
+  background-clip: content-box;  /* progress stays inside padding */
+
+  /* kill native blue halo in Edge/Chrome */
+  -webkit-appearance: none;
+  outline: none;                 /* no border on focus/hover */
+
+  /* thumb */
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    margin-top: -5px;            /* vertically centre on 6 px track */
+    border-radius: 50%;
+    background: #6b7280;
+    border: 2px solid #fff;
+    cursor: pointer;
+  }
+
+  /* Firefox equivalents */
+  &::-moz-range-track {
+    height: 6px;
+    background: inherit;
+    border-radius: 3px;
+  }
+  &::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    background: #6b7280;
+    cursor: pointer;
+  }
+}
+
+
+}
+
+button.primary {
+  width: 100%;
+  background: #0d9488;        // teal‑600
+  color: #ffffff;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  &:hover {
+    background: #0f766e;      // teal‑700
+  }
+}
+
+/* -------- questions area ------------- */
+.questions-wrapper {
+  flex: 1 1 0;
+}
+
+.questions-grid {
+  display: grid;
+  grid-template-rows: repeat(3, auto); // 3 rows max → new column after each three
+  grid-auto-flow: column;
+  gap: 1.25rem;
+}
+
+/* individual question “card” */
+.question-block {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+  }
+
+  .small {
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  input,
+  select {
+    padding: 0.4rem 0.6rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    &:focus {
+      outline: 2px solid #0d9488;
+      outline-offset: 1px;
+    }
+  }
+
+  .true-false,
+  .multiple-choice {
     display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    gap: 5vh;
-    h2 {
-      font-size: 8vh;
-      padding-left: 11vw;
-    }
-    .header {
-      display: flex;
-      flex-direction: row;
-      gap: 5vw;
-      align-items: flex-start;
-      label {
-        font-size: 5vh;
-        text-align: right;
-        width: 20vw;
-      }
-      input {
-        width: 30vw;
-        height: 5vh;
-        font-size: 4vh;
-        margin-top: 2vh;
-        padding: 1vh;
-      }
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+  }
+}
 
-      textarea {
-        width: 30vw;
-        height: 60px;
-        font-size: 4vh;
-        padding: 1vh;
-      }
-    }
-    .questionNum {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      label {
-        text-align: left;
-        white-space: nowrap;
-      }
-      input {
-        width: 10vw;
-        align-self: right;
-      }
-    }
+/* ----------- mobile tweaks ----------- */
+@media (max-width: 768px) {
+  .create-topic {
+    flex-direction: column;
+    padding: calc(var(--navbar-height, 56px) + 0.5rem) 0.5rem 1rem;
+  }
+  .topic-info {
+    width: 100%;
+    position: static;
+  }
+  .questions-grid {
+    grid-auto-flow: row;
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
   }
 }

@@ -1,0 +1,55 @@
+/* ──────────────────────────────────────────────────────────── */
+/*  Core layout                                                 */
+/* ──────────────────────────────────────────────────────────── */
+
+.profile {
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  max-width: 72rem;
+  margin-inline: auto;
+}
+
+/* ──────────────────────────────────────────────────────────── */
+/*  Empty‑state message                                         */
+/* ──────────────────────────────────────────────────────────── */
+
+.profile__empty {
+  text-align: center;
+  font-size: 1rem;
+  color: #6b7280;
+}
+
+/* ──────────────────────────────────────────────────────────── */
+/*  Topic sections (existing)                                   */
+/* ──────────────────────────────────────────────────────────── */
+
+.sectionTitle {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.topicList,
+.visitedList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+/* visited wrapper keeps card + score together */
+
+.visitedItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.visitedScore {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-top: 0.25rem;
+}
+
+/* (rest of the file — header, buttons, etc. — unchanged) */

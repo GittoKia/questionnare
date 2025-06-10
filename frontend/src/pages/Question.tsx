@@ -2,78 +2,103 @@ import { toast } from 'react-toastify';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getTopic } from '../api';
-import type { Topic,Question } from '../types';
+import type { Topic, Question } from '../types';
 import '../styles/Question.scss';
 
 const Question = () => {
-  /* route parameters */
   const { id, q } = useParams<{ id: string; q: string }>();
   const navigate = useNavigate();
 
-  /* local state */
   const [topic, setTopic] = useState<Topic | null>(null);
   const [correct, setCorrect] = useState(0);
+  const [answered, setAnswered] = useState(false);
+  const [selected, setSelected] = useState<null | boolean | number>(null);
+  const [wasCorrect, setWasCorrect] = useState<boolean | null>(null);
 
-  /* fetch topic once (and if id changes) */
   useEffect(() => {
     (async () => {
       const data = await getTopic(id);
       setTopic(data);
     })();
-    return () => {
-      if(Number(q)!=1){
-      setCorrect(0);
-      setTopic(null);}
-      //navigate(`/topic/${id}`)
-    }
-  }, []);
+    setAnswered(false);
+    setSelected(null);
+    setWasCorrect(null);
+  }, [id, q]);
 
-  /* guard first paint */
   if (!topic) return null;
 
-  /* derive current question */
-  const index = Number(q) - 1;          // 0‑based
+  const index = Number(q) - 1;
   const current = topic.questions[index];
   if (!current) return <p>No more questions.</p>;
 
-  /* click handler */
-  const handlePress = (guess: boolean|number) => {
+  const handlePress = (guess: boolean | number) => {
+    if (answered) return;
+    setSelected(guess);
     const isCorrect = guess === current.correct;
+    setWasCorrect(isCorrect);
+    setAnswered(true);
     toast[isCorrect ? 'success' : 'error'](isCorrect ? 'Correct!' : 'Incorrect.');
+    if (isCorrect) setCorrect(c => c + 1);
+  };
 
-    const nextCorrect = correct + (isCorrect ? 1 : 0);
-    setCorrect(nextCorrect);
-
-    const nextQ = Number(q) + 1;        // stay 1‑based in URL
+  const handleContinue = () => {
+    const nextQ = Number(q) + 1;
     if (nextQ <= topic.questions.length) {
-      navigate(`/topic/${topic._id}/question/${nextQ}`, { state: { correct: nextCorrect } });
+      navigate(`/topic/${topic._id}/question/${nextQ}`, { state: { correct } });
     } else {
       navigate(`/topic/${topic._id}/result`, {
-        state: { correct: nextCorrect, total: topic.questions.length ,solverId:topic.author},
+        state: { correct, total: topic.questions.length, solverId: topic.author },
       });
     }
   };
 
-  /* render */
-  return (
-    <div className="topic">
-      <h2>{current.prompt}</h2>
+  // Helper to determine button class
+  const getButtonClass = (val: boolean | number) => {
+    if (!answered) return '';
+    if (val === current.correct) return 'correct-answer'; // always green border
+    if (val === selected && selected !== current.correct) return 'wrong-answer'; // red border if selected and wrong
+    return '';
+  };
 
+  return (
+    <div className="question">
+      <h2 className="question__prompt">{current.prompt}</h2>
       <div className="buttons">
-        {current.type === "truefalse" && Array.isArray(current.answers) && typeof current.answers[0] === "boolean" ? (
+        {current.type === "truefalse" ? (
           <>
-            <button onClick={() => handlePress(true)}>True</button>
-            <button onClick={() => handlePress(false)}>False</button>
+            <button
+              className={`tfTrue ${getButtonClass(true)}`}
+              onClick={() => handlePress(true)}
+              disabled={answered}
+            >
+              True
+            </button>
+            <button
+              className={`tfFalse ${getButtonClass(false)}`}
+              onClick={() => handlePress(false)}
+              disabled={answered}
+            >
+              False
+            </button>
           </>
-        ) : current.type === "multiple" && Array.isArray(current.answers) && typeof current.answers[0] === "string" ? (
+        ) : current.type === "multiple" ? (
           (current.answers as string[]).map((ans, idx) => (
-            <button key={idx} onClick={() => handlePress(idx)}>
+            <button
+              key={idx}
+              className={getButtonClass(idx)}
+              onClick={() => handlePress(idx)}
+              disabled={answered}
+            >
               {ans}
             </button>
           ))
         ) : null}
       </div>
-
+      {answered && (
+        <button className="continue-btn" onClick={handleContinue}>
+          Continue
+        </button>
+      )}
       <p className="progress">
         Question {q} / {topic.questions.length}
       </p>

@@ -1,22 +1,27 @@
-import { useState } from "react"
-import CreateUser from "../components/CreateUser"
-import Login from "../components/Login"
-import '../styles/Landing.scss'
-const Landing = () => {
-  const [view, setView] = useState(true)
-  const Switch = () => setView(!view);
-  return (
-    <div className='both'>
-      <h1>{view ? "Sign In" : "Create Account"}</h1>
-      {view ? 
-      <div className='one login'>
-      <Login onSwitch={Switch}/>
-      </div> : 
-      <div className='one create'>
-      <CreateUser onSwitch={Switch}/>
-      </div>}
-    </div>
-  )
-}
+import { useState } from "react";
+import CreateUser from "../components/CreateUser";
+import Login from "../components/Login";
+import "../styles/Auth.scss";          // ← one import covers both
+import "../styles/Landing.scss";       // (keep if you still need top‑level tweaks)
 
-export default Landing
+const Landing = () => {
+  const [view, setView] = useState<"login" | "signup">("login");
+  const toggle = () => setView(view === "login" ? "signup" : "login");
+
+  return (
+    <div className="auth">
+      <h1 className="auth__title">
+        {view === "login" ? "Sign In" : "Create Account"}
+      </h1>
+
+      <div className="auth__card">
+        {view === "login" ? (
+          <Login onSwitch={toggle} />
+        ) : (
+          <CreateUser onSwitch={toggle} />
+        )}
+      </div>
+    </div>
+  );
+};
+export default Landing;

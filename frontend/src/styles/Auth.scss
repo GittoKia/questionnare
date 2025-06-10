@@ -1,0 +1,124 @@
+/* src/styles/Auth.scss */
+/* Styles shared by Sign‑In (Login) and Create‑Account screens. */
+
+/* ──────────────────────────────────────────────────────────── */
+/*  Viewport wrapper                                            */
+/* ──────────────────────────────────────────────────────────── */
+
+.auth {
+  min-height: calc(100vh - 4rem);   /* full height minus navbar */
+  padding: 1rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+
+/* ──────────────────────────────────────────────────────────── */
+/*  Card container                                              */
+/* ──────────────────────────────────────────────────────────── */
+
+.auth__card {
+  width: 100%;
+  max-width: 26rem;                 /* ≈ 416 px */
+  padding: 2rem 2.5rem;
+
+  background: #ffffff;
+  border: 1px solid #e5e7eb;        /* zinc‑200 */
+  border-radius: 0.75rem;           /* 12 px */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
+
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ──────────────────────────────────────────────────────────── */
+/*  Title                                                       */
+/* ──────────────────────────────────────────────────────────── */
+
+.auth__title {
+  margin: 0;
+  font-size: 2rem;                  /* 32 px */
+  font-weight: 700;
+  color: #111827;                   /* zinc‑900 */
+  text-align: center;
+}
+
+/* ──────────────────────────────────────────────────────────── */
+/*  Form fields                                                 */
+/* ──────────────────────────────────────────────────────────── */
+
+.auth__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;                     /* 20 px */
+}
+
+.auth__input {
+  padding: 0.625rem 0.75rem;        /* 10 px TB, 12 px LR */
+  font-size: 1rem;                  /* 16 px */
+  border: 1px solid #d1d5db;        /* zinc‑300 */
+  border-radius: 0.5rem;            /* 8 px */
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+  &:focus {
+    border-color: #6366f1;          /* indigo‑500 */
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+  }
+}
+
+/* ──────────────────────────────────────────────────────────── */
+/*  Button set                                                  */
+/* ──────────────────────────────────────────────────────────── */
+
+.auth__buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: stretch;
+}
+
+/* primary = indigo */
+.auth__submit {
+  flex: 1 1 8rem;
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #ffffff;
+  background: #10b981;              /* emerald‑500 to match Submit in CreateTopic */
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: #059669;            /* emerald‑600 */
+  }
+}
+
+/* secondary switch link */
+.auth__switch {
+  flex: 1 1 8rem;
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #374151;                   /* zinc‑700 */
+  background: #e5e7eb;              /* zinc‑200 */
+  border: 1px solid #d1d5db;        /* zinc‑300 */
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: #d1d5db;            /* zinc‑300 */
+  }
+}
+
+body{
+display: block !important;
+}

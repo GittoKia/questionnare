@@ -1,21 +1,97 @@
-.topic{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    h2{
-color:red;
-font-size:25px;
-    }
-    p{
-        font-size:15px;
-    }
+/* src/styles/Question.scss */
+
+/* ──────────────────────────────────────────────────────────── */
+/*  Quiz question page                                         */
+/* ──────────────────────────────────────────────────────────── */
+
+.question {
+  max-width: 48rem;                 /* 768 px */
+  margin-inline: auto;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
-.buttons{
-    display:flex;
-    flex-direction:row;
-    button{
-    background-color:black;
-    color:white;
+/* Prompt ----------------------------------------------------- */
+.question__prompt {
+  margin: 0;
+  font-size: 1.5rem;                /* 24 px */
+  font-weight: 600;
+  line-height: 1.4;
+  color: #111827;                   /* zinc‑900 */
+}
+
+/* Buttons wrapper ------------------------------------------- */
+.buttons {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+
+  @media (min-width: 32rem) {
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  }
+}
+
+/* Individual button style ----------------------------------- */
+.buttons > button {
+  padding: 0.75rem 1rem;
+  font-size: 1rem;                  /* 16 px */
+  font-weight: 500;
+  color: #374151;                   /* zinc‑700 */
+  background: #f3f4f6;              /* zinc‑100 */
+  border: 1px solid #d1d5db;        /* zinc‑300 */
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+
+  &:hover {
+    background: #e5e7eb;            /* zinc‑200 */
+  }
+
+  /* larger colour buttons for TF */
+  &.tfTrue,
+  &.tfFalse {
+    background: #6366f1;            /* indigo‑500 */
+    color: #ffffff;
+    border: none;
+
+    &:hover {
+      background: #4f46e5;          /* indigo‑600 */
     }
+  }
+}
+
+/* Progress indicator ---------------------------------------- */
+.progress {
+  margin: 0;
+  font-size: 0.875rem;              /* 14 px */
+  color: #6b7280;                   /* zinc‑500 */
+  align-self: flex-end;
+}
+
+.correct-answer {
+  border: 2px solid #22c55e !important; // green-500
+}
+.wrong-answer {
+  border: 2px solid #ef4444 !important; // red-500
+}
+.continue-btn {
+  margin-top: 2rem;
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  background: #0ea5e9;
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+.toast-success {
+  background: #10b981 !important; // emerald-500
+  color: #fff !important;
+}
+.toast-error {
+  background: #ef4444 !important; // red-500
+  color: #fff !important;
 }
